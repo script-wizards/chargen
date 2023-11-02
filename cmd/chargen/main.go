@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/go-chi/chi"
+	"github.com/script-wizards/chargen/pkg/character"
 )
 
 func main() {
@@ -140,34 +141,36 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.New("webpage").Parse(string(tpl))
 	check(err)
 
+	char := character.NewRandomChar()
+
 	data := Character{
 		Class:        "Halfling",
 		Level:        1,
 		Title:        "Halfling Swordmaster",
 		Alignment:    "Neutral",
-		STR:          12,
-		INT:          9,
-		WIS:          13,
-		DEX:          16,
-		CON:          14,
-		CHA:          15,
-		ModSTR:       calcMod(12),
-		ModINT:       calcINTMod(9),
-		ModWIS:       calcMod(13),
-		ModDEX:       calcMod(16),
-		ModCON:       calcMod(14),
-		ModCHA:       calcCHAMod(15),
+		STR:          char.STR,
+		INT:          char.INT,
+		WIS:          char.WIS,
+		DEX:          char.DEX,
+		CON:          char.CON,
+		CHA:          char.CHA,
+		ModSTR:       calcMod(char.STR),
+		ModINT:       calcINTMod(char.INT),
+		ModWIS:       calcMod(char.WIS),
+		ModDEX:       calcMod(char.DEX),
+		ModCON:       calcMod(char.CON),
+		ModCHA:       calcCHAMod(char.CHA),
 		Literacy:     "literate",
 		HitPoints:    6,
 		HitDie:       6,
 		ArmorClass:   5,
-		Initiative:   calcInitiative(16),
+		Initiative:   calcInitiative(char.DEX),
 		SaveDeath:    8,
 		SaveWands:    9,
 		SaveParalyze: 10,
 		SaveBreath:   13,
 		SaveSpells:   12,
-		OpenDoors:    calcOpenDoors(12),
+		OpenDoors:    calcOpenDoors(char.STR),
 		THAC0:        calcTHAC0(19),
 		XPBonus:      5,
 		XPNext:       2000,
