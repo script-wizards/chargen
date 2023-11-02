@@ -135,7 +135,7 @@ func calcTHAC0(score int) string {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	tpl, err := os.ReadFile("template.html")
+	tpl, err := os.ReadFile("templates/template.html")
 	check(err)
 
 	t, err := template.New("webpage").Parse(string(tpl))
