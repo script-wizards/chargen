@@ -6,9 +6,11 @@
     <title>chargen | Script Wizards</title>
     <style>
       html {
+        display: table;
         margin: auto;
       }
       body {
+        display: table-cell;
         color: #ece3d0;
         background-color: #212121;
         max-width: 7in;
@@ -24,49 +26,43 @@
     </style>
   </head>
   <pre>
-┌────────────────────────────────────┐┌────────────────────────────────────┐
-│ NAME                               ││ PLAYER                             │
-└────────────────────────────────────┘└────────────────────────────────────┘
-┌────────────────────────────────────┐┌─AC──────────────┐┌─HP─────┬─MAX────┐
-│ Class/Lvl     Halfling 1           ││                 ││        │        │
-│ Title         Halfling Swordmaster ││                 ││        │        │
-│ Alignment     Neutral              ││                 ││        │        │
-└────────────────────────────────────┘└─────────────────┘└────────┴────────┘
-┌─ABILITY SCORES───────────────────────────────────────────────────────────┐
-│ STR    10  +0    THAC0 (Melee), damage (melee, thrown), open doors       │
-│ INT    12  +0    Languages, literate                                     │
-│ WIS    12  +0    Saves vs magic                                          │
-│ DEX     5  -2    AC, THAC0 (missile/thrown)                              │
-│ CON     9  +0    Hit points                                              │
-│ CHA    13   —    +1 reaction, 5 max retainers, morale 8                  │
-└──────────────────────────────────────────────────────────────────────────┘
-┌─COMBAT───────────────────┐┌─SAVING THROWS────────────┐┌─MOVEMENT─────────┐
-│ Hit Points (1d6)      6  ││ Death/Poison          8  ││ OV     24 mi/day │
-│ Armor Class           5  ││ Wands                 9  ││ EX   120 ft/turn │
-│ Melee hit/dmg        +0  ││ Paralyze/Petrify     10  ││ EN   40 ft/round │
-│ Missile hit          -2  ││ Breath Attacks       13  ││ Open Doors   2/6 │
-│ Initiative           -1  ││ Spells/Rods/Staves 12+0  ││                  │
-└──────────────────────────┘└──────────────────────────┘└──────────────────┘
-┌─THAC0─────────────────────────────┐┌─EXPERIENCE──────────────────────────┐
-│ AC  9  8  7  6  5  4  3  2  1  0  ││                                  5% │
-│ d20 10 11 12 13 14 15 16 17 18 19 ││                               /2000 │
-└───────────────────────────────────┘└─────────────────────────────────────┘
-──INVENTORY─────────────────────────────────────────────────────────────────
+┌─NAME───────────────────────────────┬─PLAYER─────────────────────────────┐
+│                                    │                                    │
+├────────────────────────────────────┼─AC───────────────┬─HP─────┬─MAX────┤
+│ Class         Level 1 Halfling     │                  │        │        │
+│ Title         Halfling Veteran     │                  │        │        │
+│ Alignment     Neutral              │                  │        │        │
+├─ABILITY SCORES─────────────────────┴──────────────────┴────────┴────────┤
+│ STR    15  +1    THAC0 (Melee), damage (melee, thrown), open doors      │
+│ INT    11  +0    Languages, literate                                    │
+│ WIS    18  +3    Saves vs magic                                         │
+│ DEX    13  +1    AC, THAC0 (missile/thrown)                             │
+│ CON     7  -1    Hit points                                             │
+│ CHA    12   —    +0 reaction, 4 max retainers, morale 7                 │
+├─COMBAT──────────────────┬─SAVING THROWS───────────┬─MOVEMENT────────────┤
+│ Hit Points (1d8)      8 │ Death/Poison          8 │ OV        24 mi/day │
+│ Armor Class           3 │ Wands                 9 │ EX      120 ft/turn │
+│ Melee hit/dmg        +1 │ Paralyze/Petrify     10 │ EN      40 ft/round │
+│ Missile hit          +1 │ Breath Attacks       13 │ Doors           3/6 │
+│ Initiative           +1 │ Spells/Rods/Staves   12 │                     │
+├─THAC0───────────────────┴──────────┬─EXPERIENCE───┴─────────────────────┤
+│ AC   9  8  7  6  5  4  3  2  1  0  │                               +10% │
+│ d20  10 11 12 13 14 15 16 17 18 19 │                              /2000 │
+└─INVENTORY──────────────────────────┴────────────────────────────────────┘
 
-  Sword (1d10, Melee)
-  Short bow (1d6, Missile 5'-50'/51'-100'/101'-150')
   Torches x 6 □ □ □ □ □ □
   Iron rations x 7 □ □ □ □ □ □ □
   Backpack
   Tinder box
   Waterskin
-  Chain mail armor
-  Shield
-  Arrows x 20
-  10' pole
-  50' of rope
+  Chainmail (AC 5)
+  Shield (+1 AC)
+  Mace - 1d6, blunt, melee
+  Pole arm - 1d10, brace, melee, slow, 2H
+  Holy water
+  Small sack
 
-──ABILITIES─────────────────────────────────────────────────────────────────
+──NOTES────────────────────────────────────────────────────────────────────
 
   Halflings are very accurate with all missile weapons and gain a bonus of
   +1, in addition to Dexterity adjustments, on their to-hit rolls when

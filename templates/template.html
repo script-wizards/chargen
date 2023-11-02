@@ -26,34 +26,30 @@
     </style>
   </head>
   <pre>
-┌────────────────────────────────────┐┌────────────────────────────────────┐
-│ NAME                               ││ PLAYER                             │
-└────────────────────────────────────┘└────────────────────────────────────┘
-┌────────────────────────────────────┐┌─AC──────────────┐┌─HP─────┬─MAX────┐
-│ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}  ││                 ││        │        │
-│ Title         {{printf "%-20s" .Title}} ││                 ││        │        │
-│ Alignment     {{printf "%-7s" .Alignment}}              ││                 ││        │        │
-└────────────────────────────────────┘└─────────────────┘└────────┴────────┘
-┌─ABILITY SCORES───────────────────────────────────────────────────────────┐
-│ STR    {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}    THAC0 (Melee), damage (melee, thrown), open doors       │
-│ INT    {{printf "%2d" .INT}}  {{printf "%+2d" .ModINT}}    Languages, {{printf "%-10s" .Literacy}}                                   │
-│ WIS    {{printf "%2d" .WIS}}  {{printf "%+2d" .ModWIS}}    Saves vs magic                                          │
-│ DEX    {{printf "%2d" .DEX}}  {{printf "%+2d" .ModDEX}}    AC, THAC0 (missile/thrown)                              │
-│ CON    {{printf "%2d" .CON}}  {{printf "%+2d" .ModCON}}    Hit points                                              │
-│ CHA    {{printf "%2d" .CHA}}   —    {{printf "%+2d" (index .ModCHA 0)}} reaction, {{(index .ModCHA 1)}} max retainers, morale {{printf "%-2d" (index .ModCHA 2)}}                 │
-└──────────────────────────────────────────────────────────────────────────┘
-┌─COMBAT───────────────────┐┌─SAVING THROWS────────────┐┌─MOVEMENT─────────┐
-│ Hit Points (1d{{.HitDie}})      {{.HitPoints}}  ││ Death/Poison         {{printf "%2d" .SaveDeath}}  ││ OV     24 mi/day │
-│ Armor Class          {{printf "%2d" .ArmorClass}}  ││ Wands                {{printf "%2d" .SaveWands}}  ││ EX   120 ft/turn │
-│ Melee hit/dmg        {{printf "%+2d" .ModSTR}}  ││ Paralyze/Petrify     {{printf "%2d" .SaveParalyze}}  ││ EN   40 ft/round │
-│ Missile hit          {{printf "%+2d" .ModDEX}}  ││ Breath Attacks       {{printf "%2d" .SaveBreath}}  ││ Open Doors   {{.OpenDoors}}/6 │
-│ Initiative           {{printf "%+2d" .Initiative}}  ││ Spells/Rods/Staves   {{printf "%2d" .SaveSpells}}  ││                  │
-└──────────────────────────┘└──────────────────────────┘└──────────────────┘
-┌─THAC0─────────────────────────────┐┌─EXPERIENCE──────────────────────────┐
-│ AC  9  8  7  6  5  4  3  2  1  0  ││                              {{printf "%6s" (printf "%+d%%" .XPBonus)}} │
-│ d20 {{.THAC0}}││                               /{{printf "%4d" .XPNext}} │
-└───────────────────────────────────┘└─────────────────────────────────────┘
-──INVENTORY─────────────────────────────────────────────────────────────────
+┌─NAME───────────────────────────────┬─PLAYER─────────────────────────────┐
+│                                    │                                    │
+├────────────────────────────────────┼─AC───────────────┬─HP─────┬─MAX────┤
+│ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}  │                  │        │        │
+│ Title         {{printf "%-20s" .Title}} │                  │        │        │
+│ Alignment     {{printf "%-7s" .Alignment}}              │                  │        │        │
+├─ABILITY SCORES─────────────────────┴──────────────────┴────────┴────────┤
+│ STR    {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}    THAC0 (Melee), damage (melee, thrown), open doors      │
+│ INT    {{printf "%2d" .INT}}  {{printf "%+2d" .ModINT}}    Languages, {{printf "%-10s" .Literacy}}                                  │
+│ WIS    {{printf "%2d" .WIS}}  {{printf "%+2d" .ModWIS}}    Saves vs magic                                         │
+│ DEX    {{printf "%2d" .DEX}}  {{printf "%+2d" .ModDEX}}    AC, THAC0 (missile/thrown)                             │
+│ CON    {{printf "%2d" .CON}}  {{printf "%+2d" .ModCON}}    Hit points                                             │
+│ CHA    {{printf "%2d" .CHA}}   —    {{printf "%+2d" (index .ModCHA 0)}} reaction, {{(index .ModCHA 1)}} max retainers, morale {{printf "%-2d" (index .ModCHA 2)}}                │
+├─COMBAT──────────────────┬─SAVING THROWS───────────┬─MOVEMENT────────────┤
+│ Hit Points (1d{{.HitDie}})      {{.HitPoints}} │ Death/Poison         {{printf "%2d" .SaveDeath}} │ OV        24 mi/day │
+│ Armor Class          {{printf "%2d" .ArmorClass}} │ Wands                {{printf "%2d" .SaveWands}} │ EX      120 ft/turn │
+│ Melee hit/dmg        {{printf "%+2d" .ModSTR}} │ Paralyze/Petrify     {{printf "%2d" .SaveParalyze}} │ EN      40 ft/round │
+│ Missile hit          {{printf "%+2d" .ModDEX}} │ Breath Attacks       {{printf "%2d" .SaveBreath}} │ Doors           {{.OpenDoors}}/6 │
+│ Initiative           {{printf "%+2d" .Initiative}} │ Spells/Rods/Staves   {{printf "%2d" .SaveSpells}} │                     │
+├─THAC0───────────────────┴──────────┬─EXPERIENCE───┴─────────────────────┤
+│ AC  9  8  7  6  5  4  3  2  1  0   │                             {{printf "%6s" (printf "%+d%%" .XPBonus)}} │
+│ d20 {{.THAC0}} │                              /{{printf "%4d" .XPNext}} │
+└────────────────────────────────────┴────────────────────────────────────┘
+──INVENTORY────────────────────────────────────────────────────────────────
 
   Torches x 6 □ □ □ □ □ □
   Iron rations x 7 □ □ □ □ □ □ □
@@ -61,7 +57,7 @@
   Tinder box
   Waterskin
 {{.Inventory}}
-──NOTES─────────────────────────────────────────────────────────────────────
+──NOTES────────────────────────────────────────────────────────────────────
 
 
 
@@ -76,7 +72,7 @@
 
 
 
-────────────────────────────────────────────────────────────────────────────
+───────────────────────────────────────────────────────────────────────────
 Copyright © 2023 Script Wizards — scriptwizards.org
   </pre>
 </html>
