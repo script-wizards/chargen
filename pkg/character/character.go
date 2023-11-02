@@ -216,7 +216,7 @@ func (c *Character) NextLevel() int {
 	if c.Level >= len(xpTable[c.Class]) {
 		return -1 // max level reached
 	}
-	return xpTable[c.Class][c.Level]
+	return xpTable[c.Class][c.Level-1]
 }
 
 func generateTitle(class string, level int) string {
