@@ -22,7 +22,7 @@ type Character struct {
 }
 
 func roll(die int) int {
-	return rng.Intn(die-1) + 1
+	return 1 + rng.Intn(die)
 }
 
 func roll3d6() int {
