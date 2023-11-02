@@ -28,7 +28,7 @@
 │ NAME                               ││ PLAYER                             │
 └────────────────────────────────────┘└────────────────────────────────────┘
 ┌────────────────────────────────────┐┌─AC──────────────┐┌─HP─────┬─MAX────┐
-│ Class/Lvl     {{printf "%-7s" .Class}} {{printf "%-2d" .Level}}          ││                 ││        │        │
+│ Class         Level {{printf "%-2d %-10s" .Level .Class}}  ││                 ││        │        │
 │ Title         {{printf "%-20s" .Title}} ││                 ││        │        │
 │ Alignment     {{printf "%-7s" .Alignment}}              ││                 ││        │        │
 └────────────────────────────────────┘└─────────────────┘└────────┴────────┘
@@ -48,40 +48,31 @@
 │ Initiative           {{printf "%+2d" .Initiative}}  ││ Spells/Rods/Staves {{printf "%2d%+d" .SaveSpells .ModWIS}}  ││                  │
 └──────────────────────────┘└──────────────────────────┘└──────────────────┘
 ┌─THAC0─────────────────────────────┐┌─EXPERIENCE──────────────────────────┐
-│ AC  9  8  7  6  5  4  3  2  1  0  ││                                 {{printf "%2d" .XPBonus}}% │
+│ AC  9  8  7  6  5  4  3  2  1  0  ││                              {{printf "%6s" (printf "%+d%%" .XPBonus)}} │
 │ d20 {{.THAC0}}││                               /{{printf "%4d" .XPNext}} │
 └───────────────────────────────────┘└─────────────────────────────────────┘
 ──INVENTORY─────────────────────────────────────────────────────────────────
 
-  Sword (1d10, Melee)
-  Short bow (1d6, Missile 5'-50'/51'-100'/101'-150')
   Torches x 6 □ □ □ □ □ □
   Iron rations x 7 □ □ □ □ □ □ □
   Backpack
   Tinder box
   Waterskin
-  Chain mail armor
-  Shield
-  Arrows x 20
-  10' pole
-  50' of rope
-
+{{.Inventory}}
 ──ABILITIES─────────────────────────────────────────────────────────────────
 
-  Halflings are very accurate with all missile weapons and gain a bonus of
-  +1, in addition to Dexterity adjustments, on their to-hit rolls when
-  using them.
-  Due to their small size and skills at dodging, halflings have a bonus of
-  -2 on their armor class when being attacked by creatures larger than
-  man-sized.
-  When rolling for individual initiative (an optional rule) halflings add
-  +1, in addition to any dexterity adjustments.
-  Outdoors, halflings are difficult to spot, having the ability to vanish
-  into woods or underbrush. Halflings have only a 10% chance of being
-  detected in this type of cover, and even in dungeons there is a one-third
-  chance (a roll of 1 or 2 on 1d6) that a halfling will not be seen in
-  normal light if the character finds some cover (such as shadows), and
-  remains absolutely quiet and still.
+
+
+
+
+
+
+
+
+
+
+
+
 
 ────────────────────────────────────────────────────────────────────────────
 Copyright © 2023 Script Wizards — scriptwizards.org

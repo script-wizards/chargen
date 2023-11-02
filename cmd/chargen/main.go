@@ -144,9 +144,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	char := character.NewRandomChar()
 
 	data := Character{
-		Class:        "Halfling",
-		Level:        1,
-		Title:        "Halfling Swordmaster",
+		Class:        char.Class,
+		Level:        12,
+		Title:        char.Title,
 		Alignment:    "Neutral",
 		STR:          char.STR,
 		INT:          char.INT,
@@ -172,8 +172,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		SaveSpells:   12,
 		OpenDoors:    calcOpenDoors(char.STR),
 		THAC0:        calcTHAC0(19),
-		XPBonus:      5,
-		XPNext:       2000,
+		XPBonus:      char.PrimeRequisite(),
+		XPNext:       char.NextLevel(),
+		Inventory:    char.InventoryString(),
 	}
 
 	err = t.Execute(w, data)
@@ -211,4 +212,5 @@ type Character struct {
 	THAC0        string
 	XPBonus      int
 	XPNext       int
+	Inventory    string
 }
