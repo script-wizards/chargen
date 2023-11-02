@@ -174,7 +174,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		Literacy:     literacy(char.INT),
 		HitPoints:    char.HitPoints,
 		HitDie:       char.HitDie,
-		ArmorClass:   5,
+		ArmorClass:   char.SetAC(),
 		Initiative:   calcInitiative(char.DEX),
 		SaveDeath:    char.SaveDeath,
 		SaveWands:    char.SaveWands,

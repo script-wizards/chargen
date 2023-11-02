@@ -3,6 +3,8 @@ package character
 import (
 	"math/rand"
 	"sort"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -27,6 +29,7 @@ type Character struct {
 	HitDie       int
 	HitPoints    int
 	Inventory    []string
+	ArmorClass   int
 }
 
 func roll(die int) int {
@@ -416,4 +419,47 @@ func generateInventory(class string) []string {
 	}
 
 	return append(armor, append(weapon, gear...)...)
+}
+
+/*
+by default, a character's AC is 9. Go through the inventory and see if it has armor with (AC #) in it. if so, that becomes the new AC. go through the inventory and see if there is a shield. If so, subtract 1 from the AC. finally, subtract the DEX modifier the AC.
+*/
+func (c *Character) SetAC() int {
+	ac := 9
+	for _, item := range c.Inventory {
+		if strings.Contains(item, "AC ") {
+			acStr := strings.Split(item, "AC ")[1][0:1]
+			acInt, err := strconv.Atoi(acStr)
+			if err == nil {
+				ac = acInt
+			}
+		}
+		if strings.Contains(item, "Shield") {
+			ac -= 1
+		}
+	}
+	ac -= calcMod(c.DEX)
+	c.ArmorClass = ac
+	return ac
+}
+
+func calcMod(score int) int {
+	switch score {
+	case 3:
+		return -3
+	case 4, 5:
+		return -2
+	case 6, 7, 8:
+		return -1
+	case 9, 10, 11, 12:
+		return 0
+	case 13, 14, 15:
+		return 1
+	case 16, 17:
+		return 2
+	case 18:
+		return 3
+	default:
+		return 0
+	}
 }
