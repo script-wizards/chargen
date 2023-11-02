@@ -46,8 +46,8 @@
 │ Missile hit          {{printf "%+2d" .ModDEX}} │ Breath Attacks       {{printf "%2d" .SaveBreath}} │ Doors           {{.OpenDoors}}/6 │
 │ Initiative           {{printf "%+2d" .Initiative}} │ Spells/Rods/Staves   {{printf "%2d" .SaveSpells}} │                     │
 ├─THAC0───────────────────┴──────────┬─EXPERIENCE───┴─────────────────────┤
-│ AC  9  8  7  6  5  4  3  2  1  0   │                             {{printf "%6s" (printf "%+d%%" .XPBonus)}} │
-│ d20 {{.THAC0}} │                              /{{printf "%4d" .XPNext}} │
+│ AC    9  8  7  6  5  4  3  2  1  0 │                             {{printf "%6s" (printf "%+d%%" .XPBonus)}} │
+│ d20  {{.THAC0}}│                              /{{printf "%4d" .XPNext}} │
 └────────────────────────────────────┴────────────────────────────────────┘
 ──INVENTORY────────────────────────────────────────────────────────────────
 
