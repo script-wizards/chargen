@@ -9,17 +9,24 @@ import (
 var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 type Character struct {
-	Class     string
-	Level     int
-	Title     string
-	Alignment string
-	STR       int
-	INT       int
-	WIS       int
-	DEX       int
-	CON       int
-	CHA       int
-	Inventory []string
+	Class        string
+	Level        int
+	Title        string
+	Alignment    string
+	STR          int
+	INT          int
+	WIS          int
+	DEX          int
+	CON          int
+	CHA          int
+	SaveDeath    int
+	SaveWands    int
+	SaveParalyze int
+	SaveBreath   int
+	SaveSpells   int
+	HitDie       int
+	HitPoints    int
+	Inventory    []string
 }
 
 func roll(die int) int {
@@ -42,17 +49,60 @@ func NewRandomChar() *Character {
 	CHA := roll4d6kh3()
 
 	class := pickClass(STR, INT, WIS, DEX, CON, CHA)
+	saves := calcSaves(class)
+	hitDie := calcHD(class)
 	return &Character{
-		Class:     class,
-		Level:     1,
-		Title:     generateTitle(class, 1),
-		STR:       STR,
-		INT:       INT,
-		WIS:       WIS,
-		DEX:       DEX,
-		CON:       CON,
-		CHA:       CHA,
-		Inventory: generateInventory(class),
+		Class:        class,
+		Level:        1,
+		Title:        generateTitle(class, 1),
+		STR:          STR,
+		INT:          INT,
+		WIS:          WIS,
+		DEX:          DEX,
+		CON:          CON,
+		CHA:          CHA,
+		Inventory:    generateInventory(class),
+		SaveDeath:    saves[0],
+		SaveWands:    saves[1],
+		SaveParalyze: saves[2],
+		SaveBreath:   saves[3],
+		SaveSpells:   saves[4],
+		HitDie:       hitDie,
+		HitPoints:    roll(hitDie),
+	}
+}
+
+func calcHD(class string) int {
+	switch class {
+	case "Cleric", "Elf":
+		return 6
+	case "Dwarf", "Fighter", "Halfling":
+		return 8
+	case "Magic-User", "Thief":
+		return 4
+	default:
+		return 0
+	}
+}
+
+func calcSaves(class string) []int {
+	switch class {
+	case "Cleric":
+		return []int{11, 12, 14, 16, 15}
+	case "Dwarf":
+		return []int{8, 9, 10, 13, 12}
+	case "Elf":
+		return []int{12, 13, 13, 15, 15}
+	case "Fighter":
+		return []int{12, 13, 14, 15, 16}
+	case "Halfling":
+		return []int{8, 9, 10, 13, 12}
+	case "Magic-User":
+		return []int{13, 14, 13, 16, 15}
+	case "Thief":
+		return []int{13, 14, 13, 16, 15}
+	default:
+		return []int{0, 0, 0, 0, 0}
 	}
 }
 
