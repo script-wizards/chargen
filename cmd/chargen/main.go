@@ -134,6 +134,17 @@ func calcTHAC0(score int) string {
 	return str
 }
 
+func literacy(score int) string {
+	switch {
+	case score >= 3 && score <= 5:
+		return "illiterate"
+	case score >= 6 && score <= 18:
+		return "literate"
+	default:
+		return ""
+	}
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
 	tpl, err := os.ReadFile("templates/template.html")
 	check(err)
@@ -160,7 +171,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		ModDEX:       calcMod(char.DEX),
 		ModCON:       calcMod(char.CON),
 		ModCHA:       calcCHAMod(char.CHA),
-		Literacy:     "literate",
+		Literacy:     literacy(char.INT),
 		HitPoints:    6,
 		HitDie:       6,
 		ArmorClass:   5,
