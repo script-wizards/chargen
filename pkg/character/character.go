@@ -386,6 +386,12 @@ var gears = map[int][]string{
 
 func generateInventory(class string) []string {
 	armor := armors[roll(6)-1]
+	switch class {
+	case "Magic-User":
+		armor = nil
+	case "Thief":
+		armor = []string{"Leather armor (AC 7)"}
+	}
 
 	weapon := make([]string, 0, 2)
 	switch class {
