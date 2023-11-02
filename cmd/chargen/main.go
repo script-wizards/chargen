@@ -145,7 +145,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	data := Character{
 		Class:        char.Class,
-		Level:        12,
+		Level:        char.Level,
 		Title:        char.Title,
 		Alignment:    "Neutral",
 		STR:          char.STR,
