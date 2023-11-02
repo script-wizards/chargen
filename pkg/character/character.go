@@ -2,6 +2,7 @@ package character
 
 import (
 	"math/rand"
+	"sort"
 	"time"
 )
 
@@ -25,18 +26,20 @@ func roll(die int) int {
 	return 1 + rng.Intn(die)
 }
 
-func roll3d6() int {
-	return roll(6) + roll(6) + roll(6)
+func roll4d6kh3() int {
+	rolls := []int{roll(6), roll(6), roll(6), roll(6)}
+	sort.Ints(rolls)
+	return rolls[1] + rolls[2] + rolls[3]
 }
 
 func NewRandomChar() *Character {
 	// roll stats first before picking class
-	STR := roll3d6()
-	INT := roll3d6()
-	WIS := roll3d6()
-	DEX := roll3d6()
-	CON := roll3d6()
-	CHA := roll3d6()
+	STR := roll4d6kh3()
+	INT := roll4d6kh3()
+	WIS := roll4d6kh3()
+	DEX := roll4d6kh3()
+	CON := roll4d6kh3()
+	CHA := roll4d6kh3()
 
 	class := pickClass(STR, INT, WIS, DEX, CON, CHA)
 	return &Character{
