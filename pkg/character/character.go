@@ -62,17 +62,158 @@ func (c *Character) InventoryString() string {
 }
 
 func pickClass(STR, INT, WIS, DEX, CON, CHA int) string {
-	if CON >= 9 {
-		if DEX >= 9 {
-			return "Halfling"
+	// Calculate prime requisite bonus for each class
+	primeBonuses := map[string]int{
+		"Cleric":     primeRequisiteSingle(WIS),
+		"Dwarf":      primeRequisiteSingle(STR),
+		"Elf":        primeRequisiteElf(INT, STR),
+		"Fighter":    primeRequisiteSingle(STR),
+		"Halfling":   primeRequisiteHalfling(DEX, STR),
+		"Magic-User": primeRequisiteSingle(INT),
+		"Thief":      primeRequisiteSingle(DEX),
+	}
+
+	// Look for classes that give the highest bonus
+	highestBonus := -100
+	var classesWithHighestBonus []string
+	for class, bonus := range primeBonuses {
+		if bonus > highestBonus {
+			highestBonus = bonus
+			classesWithHighestBonus = []string{class}
+		} else if bonus == highestBonus {
+			classesWithHighestBonus = append(classesWithHighestBonus, class)
 		}
-		return "Dwarf"
 	}
-	if INT >= 9 {
-		return "Elf"
+
+	// Pick a random class from the ones that give the highest bonus
+	if len(classesWithHighestBonus) > 0 {
+		return classesWithHighestBonus[rng.Intn(len(classesWithHighestBonus))]
 	}
-	classes := []string{"Cleric", "Fighter", "Magic-User", "Thief"}
-	return classes[roll(len(classes))-1]
+
+	// Look for classes that give the second highest bonus
+	secondHighestBonus := -100
+	var classesWithSecondHighestBonus []string
+	for class, bonus := range primeBonuses {
+		if bonus > secondHighestBonus && bonus < highestBonus {
+			secondHighestBonus = bonus
+			classesWithSecondHighestBonus = []string{class}
+		} else if bonus == secondHighestBonus {
+			classesWithSecondHighestBonus = append(classesWithSecondHighestBonus, class)
+		}
+	}
+
+	// Pick a random class from the ones that give the second highest bonus
+	if len(classesWithSecondHighestBonus) > 0 {
+		return classesWithSecondHighestBonus[rng.Intn(len(classesWithSecondHighestBonus))]
+	}
+
+	// Look for classes that give 0 bonus
+	var classesWithZeroBonus []string
+	for class, bonus := range primeBonuses {
+		if bonus == 0 {
+			classesWithZeroBonus = append(classesWithZeroBonus, class)
+		}
+	}
+
+	// Pick a random class from the ones that give 0 bonus
+	if len(classesWithZeroBonus) > 0 {
+		return classesWithZeroBonus[rng.Intn(len(classesWithZeroBonus))]
+	}
+
+	// Look for classes that give the lowest bonus
+	lowestBonus := 100
+	var classesWithLowestBonus []string
+	for class, bonus := range primeBonuses {
+		if bonus < lowestBonus {
+			lowestBonus = bonus
+			classesWithLowestBonus = []string{class}
+		} else if bonus == lowestBonus {
+			classesWithLowestBonus = append(classesWithLowestBonus, class)
+		}
+	}
+
+	// Pick a random class from the ones that give the lowest bonus
+	if len(classesWithLowestBonus) > 0 {
+		return classesWithLowestBonus[rng.Intn(len(classesWithLowestBonus))]
+	}
+
+	// If no class was found, return an empty string
+	return ""
+}
+
+func PrimeRequisite(class string, STR, INT, WIS, DEX, CON, CHA int) int {
+	switch class {
+	case "Cleric":
+		return primeRequisiteSingle(WIS)
+	case "Dwarf":
+		return primeRequisiteSingle(STR)
+	case "Elf":
+		return primeRequisiteElf(INT, STR)
+	case "Fighter":
+		return primeRequisiteSingle(STR)
+	case "Halfling":
+		return primeRequisiteHalfling(DEX, STR)
+	case "Magic-User":
+		return primeRequisiteSingle(INT)
+	case "Thief":
+		return primeRequisiteSingle(DEX)
+	default:
+		return 0
+	}
+}
+
+func primeRequisiteSingle(prime int) int {
+	switch {
+	case prime >= 3 && prime <= 5:
+		return -20
+	case prime >= 6 && prime <= 8:
+		return -10
+	case prime >= 9 && prime <= 12:
+		return 0
+	case prime >= 13 && prime <= 15:
+		return 5
+	case prime >= 16 && prime <= 18:
+		return 10
+	default:
+		return 0
+	}
+}
+
+func primeRequisiteElf(INT, STR int) int {
+	if INT >= 13 && STR >= 13 {
+		if INT >= 16 {
+			return 10
+		}
+		return 5
+	}
+	return 0
+}
+
+func primeRequisiteHalfling(prime1, prime2 int) int {
+	if prime1 >= 13 || prime2 >= 13 {
+		if prime1 >= 13 && prime2 >= 13 {
+			return 10
+		}
+		return 5
+	}
+	return 0
+}
+
+var xpTable = map[string][]int{
+	"Cleric":     {1500, 3000, 6000},
+	"Dwarf":      {2200, 4400, 8800},
+	"Elf":        {4000, 8000, 16000},
+	"Fighter":    {2000, 4000, 8000},
+	"Halfling":   {2000, 4000, 8000},
+	"Magic-User": {2500, 5000, 10000},
+	"Thief":      {1200, 2400, 4800},
+}
+
+func (c *Character) NextLevel() int {
+	if c.Level >= len(xpTable[c.Class]) {
+		return -1 // max level reached
+	}
+	return xpTable[c.Class][c.Level]
 }
 
 func generateTitle(class string, level int) string {
@@ -142,77 +283,6 @@ func generateTitle(class string, level int) string {
 		}
 	}
 	return ""
-}
-
-var xpTable = map[string][]int{
-	"Cleric":     {1500, 3000, 6000},
-	"Dwarf":      {2200, 4400, 8800},
-	"Elf":        {4000, 8000, 16000},
-	"Fighter":    {2000, 4000, 8000},
-	"Halfling":   {2000, 4000, 8000},
-	"Magic-User": {2500, 5000, 10000},
-	"Thief":      {1200, 2400, 4800},
-}
-
-func (c *Character) NextLevel() int {
-	if c.Level >= len(xpTable[c.Class]) {
-		return -1 // max level reached
-	}
-	return xpTable[c.Class][c.Level]
-}
-
-func (c *Character) PrimeRequisite() int {
-	switch c.Class {
-	case "Cleric":
-		return primeRequisiteSingle(c.WIS)
-	case "Dwarf":
-		return primeRequisiteSingle(c.STR)
-	case "Elf":
-		if c.INT >= 13 && c.STR >= 13 {
-			if c.INT >= 16 {
-				return 10
-			}
-			return 5
-		}
-		return 0
-	case "Fighter":
-		return primeRequisiteSingle(c.STR)
-	case "Halfling":
-		if c.DEX >= 13 && c.STR >= 13 {
-			if c.STR >= 13 {
-				return 5
-			}
-			if c.STR >= 13 && c.DEX >= 13 {
-				return 10
-			}
-		} else if c.STR >= 13 {
-			return 5
-		}
-		return 0
-	case "Magic-User":
-		return primeRequisiteSingle(c.INT)
-	case "Thief":
-		return primeRequisiteSingle(c.DEX)
-	default:
-		return 0
-	}
-}
-
-func primeRequisiteSingle(prime int) int {
-	switch {
-	case prime >= 3 && prime <= 5:
-		return -20
-	case prime >= 6 && prime <= 8:
-		return -10
-	case prime >= 9 && prime <= 12:
-		return 0
-	case prime >= 13 && prime <= 15:
-		return 5
-	case prime >= 16 && prime <= 18:
-		return 10
-	default:
-		return 0
-	}
 }
 
 var armors = map[int][]string{

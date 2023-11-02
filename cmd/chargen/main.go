@@ -172,7 +172,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		SaveSpells:   12,
 		OpenDoors:    calcOpenDoors(char.STR),
 		THAC0:        calcTHAC0(19),
-		XPBonus:      char.PrimeRequisite(),
+		XPBonus:      character.PrimeRequisite(char.Class, char.STR, char.INT, char.WIS, char.DEX, char.CON, char.CHA),
 		XPNext:       char.NextLevel(),
 		Inventory:    char.InventoryString(),
 	}
