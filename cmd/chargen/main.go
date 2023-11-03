@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"compress/gzip"
 	"fmt"
 	"log"
 	"net/http"
@@ -189,8 +191,19 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		Inventory:    char.InventoryString(),
 	}
 
-	err = t.Execute(w, data)
-	check(err)
+	var buf bytes.Buffer
+	if err := t.Execute(&buf, data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Encoding", "gzip")
+	gz := gzip.NewWriter(w)
+	defer gz.Close()
+	if _, err := gz.Write(buf.Bytes()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 type Character struct {
