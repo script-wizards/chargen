@@ -158,7 +158,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		Class:        char.Class,
 		Level:        char.Level,
 		Title:        char.Title,
-		Alignment:    "Neutral",
+		Alignment:    char.Alignment,
 		STR:          char.STR,
 		INT:          char.INT,
 		WIS:          char.WIS,

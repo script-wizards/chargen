@@ -63,6 +63,7 @@ func NewRandomChar() *Character {
 		Class:        class,
 		Level:        1,
 		Title:        generateTitle(class, 1),
+		Alignment:    alignment(),
 		STR:          STR,
 		INT:          INT,
 		WIS:          WIS,
@@ -498,4 +499,14 @@ func calcMod(score int) int {
 	default:
 		return 0
 	}
+}
+
+var alignments = []string{
+	"Lawful",
+	"Neutral",
+	"Chaotic",
+}
+
+func alignment() string {
+	return alignments[rng.Intn(3)]
 }
