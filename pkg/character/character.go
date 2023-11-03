@@ -28,6 +28,7 @@ type Character struct {
 	SaveSpells   int
 	HitDie       int
 	HitPoints    int
+	Gold         int
 	Inventory    []string
 	ArmorClass   int
 }
@@ -40,6 +41,10 @@ func roll4d6kh3() int {
 	rolls := []int{roll(6), roll(6), roll(6), roll(6)}
 	sort.Ints(rolls)
 	return rolls[1] + rolls[2] + rolls[3]
+}
+
+func roll3d6() int {
+	return roll(6) + roll(6) + roll(6)
 }
 
 func NewRandomChar() *Character {
@@ -64,6 +69,7 @@ func NewRandomChar() *Character {
 		DEX:          DEX,
 		CON:          CON,
 		CHA:          CHA,
+		Gold:         roll3d6(),
 		Inventory:    generateInventory(class),
 		SaveDeath:    saves[0],
 		SaveWands:    saves[1],
@@ -111,8 +117,12 @@ func calcSaves(class string) []int {
 
 func (c *Character) InventoryString() string {
 	s := ""
-	for _, item := range c.Inventory {
-		s += "  " + item + "\n"
+	for i, item := range c.Inventory {
+		if i == len(c.Inventory)-1 {
+			s += "  " + item
+		} else {
+			s += "  " + item + "\n"
+		}
 	}
 	return s
 }
@@ -376,14 +386,14 @@ var gears = map[int][]string{
 	1:  {"Crowbar"},
 	2:  {"Hammer", "12 iron spikes"},
 	3:  {"Holy water"},
-	4:  {"Lantern", "3 flasks of oil"},
+	4:  {"Lantern", "Oil flask x 3 □ □ □"},
 	5:  {"Mirror (hand-sized, steel)"},
 	6:  {"10' Pole"},
 	7:  {"50' of Rope"},
 	8:  {"50' of Rope", "Grappling hook"},
 	9:  {"Large sack"},
 	10: {"Small sack"},
-	11: {"Stakes (3)", "Mallet"},
+	11: {"Stakes x 3 □ □ □", "Mallet"},
 	12: {"Wolfsbane (1 bunch)"},
 }
 
@@ -397,20 +407,46 @@ func generateInventory(class string) []string {
 	}
 
 	weapon := make([]string, 0, 2)
+	weaponMap := make(map[string]bool)
 	switch class {
 	case "Cleric":
-		weapon = append(weapon, weaponsCleric[roll(4)-1]...)
-		weapon = append(weapon, weaponsCleric[roll(4)-1]...)
+		for len(weapon) < 2 {
+			weapons := weaponsCleric[roll(4)-1]
+			for _, w := range weapons {
+				if !weaponMap[w] {
+					weapon = append(weapon, w)
+					weaponMap[w] = true
+					break
+				}
+			}
+		}
 	case "Magic-User":
 		weapon = append(weapon, "Dagger - 1d4, melee, missile (5'-10'/11'-20'/21'-30')")
 	default:
-		weapon = append(weapon, weapons[roll(12)-1]...)
-		weapon = append(weapon, weapons[roll(12)-1]...)
+		for len(weapon) < 2 {
+			weapons := weapons[roll(12)-1]
+			for _, w := range weapons {
+				if !weaponMap[w] {
+					weapon = append(weapon, w)
+					weaponMap[w] = true
+					break
+				}
+			}
+		}
 	}
 
 	gear := make([]string, 0, 3)
-	gear = append(gear, gears[roll(12)-1]...)
-	gear = append(gear, gears[roll(12)-1]...)
+	gearMap := make(map[string]bool)
+	for len(gear) < 3 {
+		items := gears[roll(12)-1]
+		for _, item := range items {
+			if !gearMap[item] {
+				gear = append(gear, item)
+				gearMap[item] = true
+				break
+			}
+		}
+	}
 	switch class {
 	case "Cleric":
 		gear = append(gear, "Holy symbol")

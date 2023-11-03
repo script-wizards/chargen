@@ -185,6 +185,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		THAC0:        calcTHAC0(19),
 		XPBonus:      character.PrimeRequisite(char.Class, char.STR, char.INT, char.WIS, char.DEX, char.CON, char.CHA),
 		XPNext:       char.NextLevel(),
+		Gold:         char.Gold,
 		Inventory:    char.InventoryString(),
 	}
 
@@ -223,5 +224,6 @@ type Character struct {
 	THAC0        string
 	XPBonus      int
 	XPNext       int
+	Gold         int
 	Inventory    string
 }
