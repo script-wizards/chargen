@@ -84,29 +84,26 @@
 ┌NAME──────────────────────────┬PLAYER────────────────────────┐
 │                              │                              │
 ├──────────────────────────────┴──────┬AC─────┬HP─────┬MAX────┤
-│ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}   │       │       │       │
-│ Title         {{printf "%-20s" .Title}}  │       │       │       │
-│ Alignment     {{printf "%-7s" .Alignment}}               │       │       │       │
+│ Class                               │       │       │       │
+│ Title                               │       │       │       │
+│ Alignment                           │       │       │       │
 ├ABILITY SCORES───────────────────────┴───────┴─┬─────┴───────┤
-│ STR  {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}  Melee hit/dmg, Open Doors        │      <a class="no-print" href="." >Reroll</a><a class="print-only">      </a> │
-│ INT  {{printf "%2d" .INT}}  {{printf "%+2d" .ModINT}}  Languages, {{printf "%-10s" .Literacy}}            │       <a class="no-print" href="/blank">Clear</a><a class="print-only">     </a> │
-│ WIS  {{printf "%2d" .WIS}}  {{printf "%+2d" .ModWIS}}  Saves vs Magic                   │             │
-│ DEX  {{printf "%2d" .DEX}}  {{printf "%+2d" .ModDEX}}  AC, Missile Hit                  │             │
-│ CON  {{printf "%2d" .CON}}  {{printf "%+2d" .ModCON}}  Hit Points                       │             │
-│ CHA  {{printf "%2d" .CHA}}      {{printf "%-30s" (printf "%+d/%d/%d React/Retainers/Morale" (index .ModCHA 0) (index .ModCHA 1) (index .ModCHA 2)) }}   │             │
+│ STR          Melee hit/dmg, Open Doors        │      <a class="no-print" href="." >Reroll</a><a class="print-only">      </a> │
+│ INT          Languages, Literacy              │       <a class="no-print" href="/blank">Clear</a><a class="print-only">     </a> │
+│ WIS          Saves vs Magic                   │             │
+│ DEX          AC, Missile Hit                  │             │
+│ CON          Hit Points                       │             │
+│ CHA            / /  React/Retainers/Morale    │             │
 ├COMBAT────────────────┬SAVING THROWS───────────┼MOVEMENT─────┤
-│ Hit Points (1d{{.HitDie}})  {{printf "%2d" .HitPoints}} │ Death/Poison        {{printf "%2d" .SaveDeath}} │ OV   90mi/d │
-│ Armor Class       {{printf "%2d" .ArmorClass}} │ Wands               {{printf "%2d" .SaveWands}} │ EX   120'/t │
-│ Melee hit/dmg     {{printf "%+2d" .ModSTR}} │ Paralyze/Petrify    {{printf "%2d" .SaveParalyze}} │ EN    40'/r │
-│ Missile hit       {{printf "%+2d" .ModDEX}} │ Breath Attacks      {{printf "%2d" .SaveBreath}} │ Doors   {{.OpenDoors}}/6 │
-│ Initiative        {{printf "%+2d" .Initiative}} │ Spells/Rods/Staves  {{printf "%2d" .SaveSpells}} │             │
+│ Hit Points           │ Death/Poison           │ OV     mi/d │
+│ Armor Class          │ Wands                  │ EX      '/t │
+│ Melee hit/dmg        │ Paralyze/Petrify       │ EN      '/r │
+│ Missile hit          │ Breath Attacks         │ Doors    /6 │
+│ Initiative           │ Spells/Rods/Staves     │             │
 ├THAC0─────────────────┴────────────┬EXPERIENCE─┴─────────────┤
-│ AC   9  8  7  6  5  4  3  2  1  0 │                  {{printf "%6s" (printf "%+d%%" .XPBonus)}} │
-│ d20 {{.THAC0}}│                   /{{printf "%4d" .XPNext}} │
-└INVENTORY──────────────────────────┴─────────────────────────┘
- Torches x 6 □ □ □ □ □ □    Iron rations x 7 □ □ □ □ □ □ □
- Backpack  Tinder box  Waterskin  {{.Gold}}gp
-{{.Inventory}}
+│ AC   9  8  7  6  5  4  3  2  1  0 │                       % │
+│ d20                               │                   /     │
+└───────────────────────────────────┴─────────────────────────┘
     </pre>
     <footer>
       Copyright © 2023 Script Wizards —

@@ -2,8 +2,12 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>chargen | Script Wizards</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png"
+    />
     <style>
       html {
         display: table;
@@ -13,19 +17,70 @@
         display: table-cell;
         color: #ece3d0;
         background-color: #212121;
-        max-width: 7in;
-        margin: 0 auto;
+        margin: 0 25px 0 25px;
         font-family: monospace;
+      }
+      p,
+      pre {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-family: "Courier New", Courier, monospace;
+      }
+      a:link {
+        color: #ffa227;
+        background-color: transparent;
+        text-decoration: none;
+        font-family: "Courier New", Courier, monospace;
+      }
+      a:visited {
+        color: #ffa227;
+        background-color: transparent;
+        text-decoration: none;
+      }
+      a:hover {
+        color: #ffa227;
+        background-color: transparent;
+        text-decoration: underline;
+      }
+      a:active {
+        color: #ffa227;
+        background-color: transparent;
+        text-decoration: underline;
+      }
+      .print-only {
+        display: none;
       }
       @media print {
         body {
           color: #000000;
           background-color: #ffffff;
         }
+        a,
+        footer {
+          color: #000000 !important;
+        }
+        .no-print {
+          display: none;
+        }
+        .print-only {
+          display: inline;
+        }
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 12px;
+        color: #ece3d0;
+        background-color: #212121;
+        padding: 10px;
       }
     </style>
   </head>
-  <pre>
+  <body>
+    <pre>
 ┌NAME──────────────────────────┬PLAYER────────────────────────┐
 │                              │                              │
 ├──────────────────────────────┴──────┬AC─────┬HP─────┬MAX────┤
@@ -38,7 +93,7 @@
 │ WIS  18  +3  Saves vs Magic                   │             │
 │ DEX  13  +1  AC, Missile Hit                  │             │
 │ CON   7  -1  Hit Points                       │             │
-│ CHA  12  +0  Reaction, 4 Retainers, Morale 12 │             │
+│ CHA  12      +0/4/12 React/Retainers/Morale   │             │
 ├COMBAT────────────────┬SAVING THROWS───────────┼MOVEMENT─────┤
 │ Hit Points (1d8)   8 │ Death/Poison         8 │ OV   90mi/d │
 │ Armor Class        3 │ Wands                9 │ EX   120'/t │
@@ -73,8 +128,9 @@
  that a halfling will not be seen in normal light if the
  character finds some cover (such as shadows), and remains
  absolutely quiet and still.
-────────────────────────────────────────────────────────────────
- Copyright © 2023 Script Wizards — scriptwizards.org
-    </pre
-  >
+  </pre>
+  <footer>
+    Copyright © 2023 Script Wizards —
+    <a href="https://scriptwizards.org">scriptwizards.org</a>
+  </footer>
 </html>

@@ -21,6 +21,18 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Get("/", handler)
+	r.Get("/blank", func(w http.ResponseWriter, r *http.Request) {
+		tmpl, err := template.ParseFiles("templates/blank.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		err = tmpl.Execute(w, nil)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	})
 
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
