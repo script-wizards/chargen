@@ -137,9 +137,9 @@ func calcTHAC0(score int) string {
 func literacy(score int) string {
 	switch {
 	case score >= 3 && score <= 5:
-		return "illiterate"
+		return "Illiterate"
 	case score >= 6 && score <= 18:
-		return "literate"
+		return "Literate"
 	default:
 		return ""
 	}

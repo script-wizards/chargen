@@ -120,9 +120,9 @@ func (c *Character) InventoryString() string {
 	s := ""
 	for i, item := range c.Inventory {
 		if i == len(c.Inventory)-1 {
-			s += "  " + item
+			s += " " + item
 		} else {
-			s += "  " + item + "\n"
+			s += " " + item + "\n"
 		}
 	}
 	return s
@@ -363,22 +363,22 @@ var armors = map[int][]string{
 
 var weapons = map[int][]string{
 	1:  {"Battle axe - 1d8, melee, slow, 2H"},
-	2:  {"Crossbow - 1d4, missile (5'-80'/81'-160'/161'-240'), reload, slow, 2H", "20 bolts"},
-	3:  {"Hand axe - 1d6, melee, missile (5'-10'/11'-20'/21'-30')"},
+	2:  {"Crossbow - 1d4, missile (80/160/240), reload, slow, 2H", "20 bolts"},
+	3:  {"Hand axe - 1d6, melee, missile (10/20/30)"},
 	4:  {"Mace - 1d6, blunt, melee"},
 	5:  {"Pole arm - 1d10, brace, melee, slow, 2H"},
-	6:  {"Short bow - 1d6, missile (5'-50'/51'-100'/101'-150), 2H", "20 arrows"},
+	6:  {"Short bow - 1d6, missile (50/100'/150), 2H", "20 arrows"},
 	7:  {"Short sword - 1d6, melee"},
-	8:  {"Silver dagger - 1d4, melee, missile (5'-10'/11'-20'/21'-30')"},
-	9:  {"Sling - 1d4, blunt, missile (5'-40'/41'-80'/81'-160')", "20 stones"},
-	10: {"Spear - 1d6, brace, melee, missile (5'-20'/21'-40'/41'-60')"},
+	8:  {"Silver dagger - 1d4, melee, missile (10/20/30)"},
+	9:  {"Sling - 1d4, blunt, missile (40/80/160)", "20 stones"},
+	10: {"Spear - 1d6, brace, melee, missile (20/40/60)"},
 	11: {"Sword - 1d8, melee"},
 	12: {"War hammer - 1d6, blunt, melee"},
 }
 
 var weaponsCleric = map[int][]string{
 	1: {"Mace - 1d6, blunt, melee"},
-	2: {"Sling - 1d4, blunt, missile (5'-40'/41'-80'/81'-160')", "20 stones"},
+	2: {"Sling - 1d4, blunt, missile (40/80/160)", "20 stones"},
 	3: {"Staff - 1d4, blunt, melee, 2H"},
 	4: {"War hammer - 1d6, blunt, melee"},
 }
@@ -387,14 +387,14 @@ var gears = map[int][]string{
 	1:  {"Crowbar"},
 	2:  {"Hammer", "12 iron spikes"},
 	3:  {"Holy water"},
-	4:  {"Lantern", "Oil flask x 3 □ □ □"},
+	4:  {"Lantern", "Oil flask x3 □ □ □"},
 	5:  {"Mirror (hand-sized, steel)"},
 	6:  {"10' Pole"},
 	7:  {"50' of Rope"},
 	8:  {"50' of Rope", "Grappling hook"},
 	9:  {"Large sack"},
 	10: {"Small sack"},
-	11: {"Stakes x 3 □ □ □", "Mallet"},
+	11: {"Stakes x3 □ □ □", "Mallet"},
 	12: {"Wolfsbane (1 bunch)"},
 }
 
@@ -422,7 +422,7 @@ func generateInventory(class string) []string {
 			}
 		}
 	case "Magic-User":
-		weapon = append(weapon, "Dagger - 1d4, melee, missile (5'-10'/11'-20'/21'-30')")
+		weapon = append(weapon, "Dagger - 1d4, melee, missile (10/20/30)")
 	default:
 		for len(weapon) < 2 {
 			weapons := weapons[roll(12)-1]
