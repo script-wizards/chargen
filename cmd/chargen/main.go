@@ -5,10 +5,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"slices"
+	"strings"
 	"text/template"
 
 	"github.com/go-chi/chi"
 	"github.com/script-wizards/chargen/pkg/character"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func main() {
@@ -33,7 +37,6 @@ func main() {
 			return
 		}
 	})
-
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
 
@@ -157,17 +160,42 @@ func literacy(score int) string {
 	}
 }
 
+var validClasses = []string{
+	"cleric",
+	"dwarf",
+	"elf",
+	"fighter",
+	"halfling",
+	"magic-user",
+	"thief",
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
+	class := ""
+	if r.URL.Query().Get("class") != "" {
+		class = strings.ToLower(r.URL.Query().Get("class"))
+		if !slices.Contains(validClasses, class) {
+			class = ""
+		}
+	}
+
 	tpl, err := os.ReadFile("templates/template.html")
 	check(err)
 
 	t, err := template.New("webpage").Parse(string(tpl))
 	check(err)
 
-	char := character.NewRandomChar()
+	var char *character.Character
+	if class != "" {
+		char = character.NewCharClass(class)
+	} else {
+		char = character.NewRandomChar()
+	}
+
+	caser := cases.Title(language.English)
 
 	data := Character{
-		Class:        char.Class,
+		Class:        caser.String(char.Class),
 		Level:        char.Level,
 		Title:        char.Title,
 		Alignment:    char.Alignment,

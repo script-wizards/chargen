@@ -43,18 +43,94 @@ func roll4d6kh3() int {
 	return rolls[1] + rolls[2] + rolls[3]
 }
 
-func roll3d6() int {
-	return roll(6) + roll(6) + roll(6)
-}
-
-func NewRandomChar() *Character {
-	// roll stats first before picking class
+func rollStats() []int {
 	STR := roll4d6kh3()
 	INT := roll4d6kh3()
 	WIS := roll4d6kh3()
 	DEX := roll4d6kh3()
 	CON := roll4d6kh3()
 	CHA := roll4d6kh3()
+	return []int{STR, INT, WIS, DEX, CON, CHA}
+}
+
+func roll3d6() int {
+	return roll(6) + roll(6) + roll(6)
+}
+
+func unpack(src []int, dst ...*int) {
+	for ind, val := range dst {
+		*val = src[ind]
+	}
+}
+
+func isValidClass(class string, stats []int) bool {
+	switch strings.ToLower(class) {
+	case "dwarf":
+		if stats[4] >= 9 {
+			return true
+		}
+	case "elf":
+		if stats[1] >= 9 {
+			return true
+		}
+	case "halfling":
+		if stats[4] >= 9 && stats[3] >= 9 {
+			return true
+		}
+	default:
+		for _, stat := range stats {
+			if stat >= 3 && stat <= 18 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func rerollUntilValidClass(class string) []int {
+	for i := 0; i < 10; i++ {
+		stats := rollStats()
+		if isValidClass(class, stats) {
+			return stats
+		}
+	}
+	return []int{13, 13, 13, 13, 13, 13}
+}
+
+func NewCharClass(class string) *Character {
+	var STR, INT, WIS, DEX, CON, CHA int
+	stats := rerollUntilValidClass(class)
+	unpack(stats, &STR, &INT, &WIS, &DEX, &CON, &CHA)
+
+	saves := calcSaves(class)
+	hitDie := calcHD(class)
+
+	return &Character{
+		Class:        class,
+		Level:        1,
+		Title:        generateTitle(class, 1),
+		Alignment:    alignment(),
+		STR:          STR,
+		INT:          INT,
+		WIS:          WIS,
+		DEX:          DEX,
+		CON:          CON,
+		CHA:          CHA,
+		Gold:         roll3d6(),
+		Inventory:    generateInventory(class),
+		SaveDeath:    saves[0],
+		SaveWands:    saves[1],
+		SaveParalyze: saves[2],
+		SaveBreath:   saves[3],
+		SaveSpells:   saves[4],
+		HitDie:       hitDie,
+		HitPoints:    roll(hitDie),
+	}
+}
+
+func NewRandomChar() *Character {
+	var STR, INT, WIS, DEX, CON, CHA int
+	unpack(rollStats(), &STR, &INT, &WIS, &DEX, &CON, &CHA)
 
 	class := pickClass(STR, INT, WIS, DEX, CON, CHA)
 	saves := calcSaves(class)
@@ -84,11 +160,11 @@ func NewRandomChar() *Character {
 
 func calcHD(class string) int {
 	switch class {
-	case "Cleric", "Elf":
+	case "cleric", "elf":
 		return 6
-	case "Dwarf", "Fighter", "Halfling":
+	case "dwarf", "fighter", "halfling":
 		return 8
-	case "Magic-User", "Thief":
+	case "magic-user", "thief":
 		return 4
 	default:
 		return 0
@@ -97,19 +173,19 @@ func calcHD(class string) int {
 
 func calcSaves(class string) []int {
 	switch class {
-	case "Cleric":
+	case "cleric":
 		return []int{11, 12, 14, 16, 15}
-	case "Dwarf":
+	case "dwarf":
 		return []int{8, 9, 10, 13, 12}
-	case "Elf":
+	case "elf":
 		return []int{12, 13, 13, 15, 15}
-	case "Fighter":
+	case "fighter":
 		return []int{12, 13, 14, 15, 16}
-	case "Halfling":
+	case "halfling":
 		return []int{8, 9, 10, 13, 12}
-	case "Magic-User":
+	case "magic-user":
 		return []int{13, 14, 13, 16, 15}
-	case "Thief":
+	case "thief":
 		return []int{13, 14, 13, 16, 15}
 	default:
 		return []int{0, 0, 0, 0, 0}
@@ -131,13 +207,13 @@ func (c *Character) InventoryString() string {
 func pickClass(STR, INT, WIS, DEX, CON, CHA int) string {
 	// Calculate prime requisite bonus for each class
 	primeBonuses := map[string]int{
-		"Cleric":     primeRequisiteSingle(WIS),
-		"Dwarf":      primeRequisiteSingle(STR),
-		"Elf":        primeRequisiteElf(INT, STR),
-		"Fighter":    primeRequisiteSingle(STR),
-		"Halfling":   primeRequisiteHalfling(DEX, STR),
-		"Magic-User": primeRequisiteSingle(INT),
-		"Thief":      primeRequisiteSingle(DEX),
+		"cleric":     primeRequisiteSingle(WIS),
+		"dwarf":      primeRequisiteSingle(STR),
+		"elf":        primeRequisiteElf(INT, STR),
+		"fighter":    primeRequisiteSingle(STR),
+		"halfling":   primeRequisiteHalfling(DEX, STR),
+		"magic-user": primeRequisiteSingle(INT),
+		"thief":      primeRequisiteSingle(DEX),
 	}
 
 	// Look for classes that give the highest bonus
@@ -210,19 +286,19 @@ func pickClass(STR, INT, WIS, DEX, CON, CHA int) string {
 
 func PrimeRequisite(class string, STR, INT, WIS, DEX, CON, CHA int) int {
 	switch class {
-	case "Cleric":
+	case "cleric":
 		return primeRequisiteSingle(WIS)
-	case "Dwarf":
+	case "dwarf":
 		return primeRequisiteSingle(STR)
-	case "Elf":
+	case "elf":
 		return primeRequisiteElf(INT, STR)
-	case "Fighter":
+	case "fighter":
 		return primeRequisiteSingle(STR)
-	case "Halfling":
+	case "halfling":
 		return primeRequisiteHalfling(DEX, STR)
-	case "Magic-User":
+	case "magic-User":
 		return primeRequisiteSingle(INT)
-	case "Thief":
+	case "thief":
 		return primeRequisiteSingle(DEX)
 	default:
 		return 0
@@ -267,13 +343,13 @@ func primeRequisiteHalfling(prime1, prime2 int) int {
 }
 
 var xpTable = map[string][]int{
-	"Cleric":     {1500, 3000, 6000},
-	"Dwarf":      {2200, 4400, 8800},
-	"Elf":        {4000, 8000, 16000},
-	"Fighter":    {2000, 4000, 8000},
-	"Halfling":   {2000, 4000, 8000},
-	"Magic-User": {2500, 5000, 10000},
-	"Thief":      {1200, 2400, 4800},
+	"cleric":     {1500, 3000, 6000},
+	"dwarf":      {2200, 4400, 8800},
+	"elf":        {4000, 8000, 16000},
+	"fighter":    {2000, 4000, 8000},
+	"halfling":   {2000, 4000, 8000},
+	"magic-user": {2500, 5000, 10000},
+	"thief":      {1200, 2400, 4800},
 }
 
 func (c *Character) NextLevel() int {
@@ -285,7 +361,7 @@ func (c *Character) NextLevel() int {
 
 func generateTitle(class string, level int) string {
 	switch class {
-	case "Cleric":
+	case "cleric":
 		switch level {
 		case 1:
 			return "Acolyte"
@@ -294,7 +370,7 @@ func generateTitle(class string, level int) string {
 		case 3:
 			return "Priest"
 		}
-	case "Dwarf":
+	case "dwarf":
 		switch level {
 		case 1:
 			return "Dwarven Veteran"
@@ -303,7 +379,7 @@ func generateTitle(class string, level int) string {
 		case 3:
 			return "Dwarven Swordmaster"
 		}
-	case "Elf":
+	case "elf":
 		switch level {
 		case 1:
 			return "Veteran-Medium"
@@ -312,7 +388,7 @@ func generateTitle(class string, level int) string {
 		case 3:
 			return "Swordmaster-Conjurer"
 		}
-	case "Fighter":
+	case "fighter":
 		switch level {
 		case 1:
 			return "Veteran"
@@ -321,7 +397,7 @@ func generateTitle(class string, level int) string {
 		case 3:
 			return "Swordmaster"
 		}
-	case "Halfling":
+	case "halfling":
 		switch level {
 		case 1:
 			return "Halfling Veteran"
@@ -330,7 +406,7 @@ func generateTitle(class string, level int) string {
 		case 3:
 			return "Halfling Swordmaster"
 		}
-	case "Magic-User":
+	case "magic-user":
 		switch level {
 		case 1:
 			return "Medium"
@@ -339,7 +415,7 @@ func generateTitle(class string, level int) string {
 		case 3:
 			return "Conjurer"
 		}
-	case "Thief":
+	case "thief":
 		switch level {
 		case 1:
 			return "Apprentice"
@@ -401,16 +477,16 @@ var gears = map[int][]string{
 func generateInventory(class string) []string {
 	armor := armors[roll(6)-1]
 	switch class {
-	case "Magic-User":
+	case "magic-user":
 		armor = nil
-	case "Thief":
+	case "thief":
 		armor = []string{"Leather armor (AC 7)"}
 	}
 
 	weapon := make([]string, 0, 2)
 	weaponMap := make(map[string]bool)
 	switch class {
-	case "Cleric":
+	case "cleric":
 		for len(weapon) < 2 {
 			weapons := weaponsCleric[roll(4)-1]
 			for _, w := range weapons {
@@ -421,7 +497,7 @@ func generateInventory(class string) []string {
 				}
 			}
 		}
-	case "Magic-User":
+	case "magic-user":
 		weapon = append(weapon, "Dagger - 1d4, melee, missile (10/20/30)")
 	default:
 		for len(weapon) < 2 {
@@ -449,9 +525,9 @@ func generateInventory(class string) []string {
 		}
 	}
 	switch class {
-	case "Cleric":
+	case "cleric":
 		gear = append(gear, "Holy symbol")
-	case "Thief":
+	case "thief":
 		gear = append(gear, "Thieves' tools")
 	}
 
