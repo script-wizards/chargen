@@ -525,9 +525,28 @@ func generateInventory(class string) []string {
 	return append(armor, append(weapon, gear...)...)
 }
 
-/*
-by default, a character's AC is 9. Go through the inventory and see if it has armor with (AC #) in it. if so, that becomes the new AC. go through the inventory and see if there is a shield. If so, subtract 1 from the AC. finally, subtract the DEX modifier the AC.
-*/
+func (c *Character) Initiative() int {
+	initiative := 0
+	if c.Class == "halfling" {
+		initiative += 1
+	}
+	switch c.DEX {
+	case 3:
+		initiative += -2
+	case 4, 5, 6, 7, 8:
+		initiative += -1
+	case 9, 10, 11, 12:
+		initiative += 0
+	case 13, 14, 15, 16, 17:
+		initiative += 1
+	case 18:
+		initiative += 2
+	default:
+		initiative += 0
+	}
+	return initiative
+}
+
 func (c *Character) SetAC() int {
 	ac := 9
 	for _, item := range c.Inventory {

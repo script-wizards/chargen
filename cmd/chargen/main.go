@@ -115,23 +115,6 @@ func calcCHAMod(score int) []int {
 	}
 }
 
-func calcInitiative(score int) int {
-	switch score {
-	case 3:
-		return -2
-	case 4, 5, 6, 7, 8:
-		return -1
-	case 9, 10, 11, 12:
-		return 0
-	case 13, 14, 15, 16, 17:
-		return 1
-	case 18:
-		return 2
-	default:
-		return 0
-	}
-}
-
 func calcOpenDoors(score int) int {
 	switch score {
 	case 3, 4, 5, 6, 7, 8:
@@ -227,7 +210,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		HitPoints:    char.HitPoints,
 		HitDie:       char.HitDie,
 		ArmorClass:   char.SetAC(),
-		Initiative:   calcInitiative(char.DEX),
+		Initiative:   char.Initiative(),
 		SaveDeath:    char.SaveDeath,
 		SaveWands:    char.SaveWands,
 		SaveParalyze: char.SaveParalyze,
