@@ -41,7 +41,7 @@
 │ CHA    {{printf "%2d" .CHA}}   —    {{printf "%+2d" (index .ModCHA 0)}} reaction, {{(index .ModCHA 1)}} max retainers, morale {{printf "%-2d" (index .ModCHA 2)}}              │
 ├─COMBAT─────────────────┬─SAVING THROWS──────────┬─MOVEMENT────────────┤
 │ Hit Points (1d{{.HitDie}})     {{.HitPoints}} │ Death/Poison        {{printf "%2d" .SaveDeath}} │ OV        24 mi/day │
-│ Armor Class         {{printf "%2d" .ArmorClass}} │ Wands               {{printf "%2d" .SaveWands}} │ EX       20 ft/turn │
+│ Armor Class         {{printf "%2d" .ArmorClass}} │ Wands               {{printf "%2d" .SaveWands}} │ EX      120 ft/turn │
 │ Melee hit/dmg       {{printf "%+2d" .ModSTR}} │ Paralyze/Petrify    {{printf "%2d" .SaveParalyze}} │ EN      40 ft/round │
 │ Missile hit         {{printf "%+2d" .ModDEX}} │ Breath Attacks      {{printf "%2d" .SaveBreath}} │ Doors           {{.OpenDoors}}/6 │
 │ Initiative          {{printf "%+2d" .Initiative}} │ Spells/Rods/Staves  {{printf "%2d" .SaveSpells}} │                     │
