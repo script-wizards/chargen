@@ -30,6 +30,7 @@ type Character struct {
 	HitPoints    int
 	Gold         int
 	Inventory    []string
+	Abilities    []string
 	ArmorClass   int
 }
 
@@ -118,6 +119,7 @@ func NewCharClass(class string) *Character {
 		CHA:          CHA,
 		Gold:         roll3d6(),
 		Inventory:    generateInventory(class),
+		Abilities:    classAbilities(class),
 		SaveDeath:    saves[0],
 		SaveWands:    saves[1],
 		SaveParalyze: saves[2],
@@ -148,6 +150,7 @@ func NewRandomChar() *Character {
 		CHA:          CHA,
 		Gold:         roll3d6(),
 		Inventory:    generateInventory(class),
+		Abilities:    classAbilities(class),
 		SaveDeath:    saves[0],
 		SaveWands:    saves[1],
 		SaveParalyze: saves[2],
@@ -190,18 +193,6 @@ func calcSaves(class string) []int {
 	default:
 		return []int{0, 0, 0, 0, 0}
 	}
-}
-
-func (c *Character) InventoryString() string {
-	s := ""
-	for i, item := range c.Inventory {
-		if i == len(c.Inventory)-1 {
-			s += " " + item
-		} else {
-			s += " " + item + "\n"
-		}
-	}
-	return s
 }
 
 func pickClass(STR, INT, WIS, DEX, CON, CHA int) string {
@@ -585,4 +576,54 @@ var alignments = []string{
 
 func alignment() string {
 	return alignments[rng.Intn(3)]
+}
+
+func classAbilities(class string) []string {
+	return abilitiesMap[class]
+}
+
+// TODO: Might want to save line splitting for main.go
+var abilitiesMap = map[string][]string{
+	"cleric": {
+		"Cannot use sharp or piercing weapons, must carry holy symbol",
+		"Divine Magic: cast spells (lvl 2+), use divine scrolls, items",
+		"Magical Research: Spend time/money to create spells/effects",
+		"Turn Undead: 2d6 vs HD (skeleton 7, zombie 9, ghoul 11)",
+	},
+	"dwarf": {
+		"Only use small/normal weapons, can't use longbow or 2H sword",
+		"Detect new construction, sliding walls, sloping passages: 2/6",
+		"Listen at Doors: 2/6, Infravision: 60'",
+		"Languages: Dwarvish, Gnomish, Goblin, Kobold",
+	},
+	"elf": {
+		"Arcane Magic: cast spells, use arcane scrolls, items",
+		"Detect hidden/secret doors, listen at doors: 2/6",
+		"Infravision: 60, Immune to Ghoul Paralysis",
+		"Languages: Elvish, Gnoll, Hobgoblin, Orcish",
+	},
+	"fighter": {
+		"Stronghold: Can build castle or stronghold at any level",
+		"",
+		"",
+		"",
+	},
+	"halfling": {
+		"Only use small weapons/armor, can't use longbow or 2h sword",
+		"Hide: woods/undergrowth (90%), still in shadows/cover (2/6)",
+		"-2 to AC vs large opponents, +1 initiative, +1 missile attacks",
+		"Stronghold: Can build shire at any level",
+	},
+	"magic-user": {
+		"Can only use daggers, can't use shields or wear armor",
+		"Arcane Magic: cast spells, use arcane scrolls, items",
+		"Magical Research: Spend time/money to create spells/effects",
+		"",
+	},
+	"thief": {
+		"Back-Stab: +2 hit/2x dmg attacking unaware enemy from behind",
+		"Combat: Cannot wear armor heavier than leather or use shields",
+		"CS  TR  HN  HS  MS  OL  PP", // TODO: Thief skills by level
+		"87  10   2  10  20  15  20",
+	},
 }

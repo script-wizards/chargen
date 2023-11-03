@@ -102,11 +102,14 @@
 ├THAC0─────────────────┴────────────┬EXPERIENCE─┴─────────────┤
 │ AC   9  8  7  6  5  4  3  2  1  0 │                  {{printf "%6s" (printf "%+d%%" .XPBonus)}} │
 │ d20 {{.THAC0}}│                   /{{printf "%4d" .XPNext}} │
-└INVENTORY──────────────────────────┴─────────────────────────┘
+└ABILITIES──────────────────────────┴─────────────────────────┘
+{{.Abilities}}
+─INVENTORY─────────────────────────────────────────────────────
  Torches x 6 □ □ □ □ □ □    Iron rations x 7 □ □ □ □ □ □ □
  Backpack  Tinder box  Waterskin  {{.Gold}}gp
 {{.Inventory}}
-    </pre>
+</pre
+    >
     <footer>
       <pre
         class="no-print"

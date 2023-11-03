@@ -238,11 +238,24 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		XPBonus:      character.PrimeRequisite(char.Class, char.STR, char.INT, char.WIS, char.DEX, char.CON, char.CHA),
 		XPNext:       char.NextLevel(),
 		Gold:         char.Gold,
-		Inventory:    char.InventoryString(),
+		Inventory:    padString(char.Inventory),
+		Abilities:    padString(char.Abilities),
 	}
 
 	err = t.Execute(w, data)
 	check(err)
+}
+
+func padString(list []string) string {
+	s := ""
+	for i, item := range list {
+		if i == len(list)-1 {
+			s += " " + item
+		} else {
+			s += " " + item + "\n"
+		}
+	}
+	return s
 }
 
 type Character struct {
@@ -278,4 +291,5 @@ type Character struct {
 	XPNext       int
 	Gold         int
 	Inventory    string
+	Abilities    string
 }
