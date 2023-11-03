@@ -18,19 +18,19 @@
         color: #ece3d0;
         background-color: #212121;
         margin: 0 25px 0 25px;
-        font-family: monospace;
+        font-family: "Courier New", Courier, monospace;
       }
       p,
       pre {
         margin-top: 0;
         margin-bottom: 0;
+        background-color: transparent;
         font-family: "Courier New", Courier, monospace;
       }
       a:link {
         color: #ffa227;
         background-color: transparent;
         text-decoration: none;
-        font-family: "Courier New", Courier, monospace;
       }
       a:visited {
         color: #ffa227;
@@ -72,10 +72,9 @@
         left: 0;
         right: 0;
         text-align: center;
-        font-size: 12px;
         color: #ece3d0;
         background-color: #212121;
-        padding: 10px;
+        padding: 5px;
       }
     </style>
   </head>
@@ -88,8 +87,8 @@
 │ Title         {{printf "%-20s" .Title}}  │       │       │       │
 │ Alignment     {{printf "%-7s" .Alignment}}               │       │       │       │
 ├ABILITY SCORES───────────────────────┴───────┴─┬─────┴───────┤
-│ STR  {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}  Melee hit/dmg, Open Doors        │      <a class="no-print" href="." >Reroll</a><a class="print-only">      </a> │
-│ INT  {{printf "%2d" .INT}}  {{printf "%+2d" .ModINT}}  Languages, {{printf "%-10s" .Literacy}}            │       <a class="no-print" href="/blank">Clear</a><a class="print-only">     </a> │
+│ STR  {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}  Melee hit/dmg, Open Doors        │             │
+│ INT  {{printf "%2d" .INT}}  {{printf "%+2d" .ModINT}}  Languages, {{printf "%-10s" .Literacy}}            │             │
 │ WIS  {{printf "%2d" .WIS}}  {{printf "%+2d" .ModWIS}}  Saves vs Magic                   │             │
 │ DEX  {{printf "%2d" .DEX}}  {{printf "%+2d" .ModDEX}}  AC, Missile Hit                  │             │
 │ CON  {{printf "%2d" .CON}}  {{printf "%+2d" .ModCON}}  Hit Points                       │             │
@@ -109,6 +108,7 @@
 {{.Inventory}}
     </pre>
     <footer>
+      <pre><a class="no-print" href="." >Reroll</a><span class="no-print"> — </span><a class="no-print" href="/blank">Clear</a></pre>
       Copyright © 2023 Script Wizards —
       <a href="https://scriptwizards.org">scriptwizards.org</a>
     </footer>

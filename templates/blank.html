@@ -18,19 +18,19 @@
         color: #ece3d0;
         background-color: #212121;
         margin: 0 25px 0 25px;
-        font-family: monospace;
+        font-family: "Courier New", Courier, monospace;
       }
       p,
       pre {
         margin-top: 0;
         margin-bottom: 0;
+        background-color: transparent;
         font-family: "Courier New", Courier, monospace;
       }
       a:link {
         color: #ffa227;
         background-color: transparent;
         text-decoration: none;
-        font-family: "Courier New", Courier, monospace;
       }
       a:visited {
         color: #ffa227;
@@ -72,10 +72,9 @@
         left: 0;
         right: 0;
         text-align: center;
-        font-size: 12px;
         color: #ece3d0;
         background-color: #212121;
-        padding: 10px;
+        padding: 5px;
       }
     </style>
   </head>
@@ -88,8 +87,8 @@
 │ Title                               │       │       │       │
 │ Alignment                           │       │       │       │
 ├ABILITY SCORES───────────────────────┴───────┴─┬─────┴───────┤
-│ STR          Melee hit/dmg, Open Doors        │      <a class="no-print" href="." >Reroll</a><a class="print-only">      </a> │
-│ INT          Languages, Literacy              │       <a class="no-print" href="/blank">Clear</a><a class="print-only">     </a> │
+│ STR          Melee hit/dmg, Open Doors        │             │
+│ INT          Languages, Literacy              │             │
 │ WIS          Saves vs Magic                   │             │
 │ DEX          AC, Missile Hit                  │             │
 │ CON          Hit Points                       │             │
@@ -106,6 +105,7 @@
 └───────────────────────────────────┴─────────────────────────┘
     </pre>
     <footer>
+      <pre><a class="no-print" href="." >Reroll</a><span class="no-print"> — </span><a class="no-print" href="/blank">Clear</a></pre>
       Copyright © 2023 Script Wizards —
       <a href="https://scriptwizards.org">scriptwizards.org</a>
     </footer>
