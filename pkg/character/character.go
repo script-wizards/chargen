@@ -520,6 +520,10 @@ func generateInventory(class string) []string {
 		gear = append(gear, "Holy symbol")
 	case "thief":
 		gear = append(gear, "Thieves' tools")
+	case "magic-user":
+		gear = append(gear, "Spellbook: "+randomSpell(class, 1))
+	case "elf":
+		gear = append(gear, "Spellbook: "+randomSpell(class, 1))
 	}
 
 	return append(armor, append(weapon, gear...)...)
@@ -605,7 +609,7 @@ func classAbilities(class string) []string {
 var abilitiesMap = map[string][]string{
 	"cleric": {
 		"Cannot use sharp or piercing weapons, must carry holy symbol",
-		"Divine Magic: cast spells (lvl 2+), use divine scrolls, items",
+		"Divine Magic: cast spells (lvl 2+), use divine scrolls/items",
 		"Magical Research: Spend time/money to create spells/effects",
 		"Turn Undead: 2d6 vs HD (skeleton 7, zombie 9, ghoul 11)",
 	},
@@ -616,7 +620,7 @@ var abilitiesMap = map[string][]string{
 		"Languages: Dwarvish, Gnomish, Goblin, Kobold",
 	},
 	"elf": {
-		"Arcane Magic: cast spells, use arcane scrolls, items",
+		"Arcane Magic: cast spells, use arcane scrolls/items",
 		"Detect hidden/secret doors, listen at doors: 2/6",
 		"Infravision: 60, Immune to Ghoul Paralysis",
 		"Languages: Elvish, Gnoll, Hobgoblin, Orcish",
@@ -635,7 +639,7 @@ var abilitiesMap = map[string][]string{
 	},
 	"magic-user": {
 		"Can only use daggers, can't use shields or wear armor",
-		"Arcane Magic: cast spells, use arcane scrolls, items",
+		"Arcane Magic: cast spells, use arcane scrolls/items",
 		"Magical Research: Spend time/money to create spells/effects",
 		"",
 	},
@@ -645,4 +649,16 @@ var abilitiesMap = map[string][]string{
 		"CS  TR  HN  HS  MS  OL  PP", // TODO: Thief skills by level
 		"87  10   2  10  20  15  20",
 	},
+}
+
+var spellsArcane = map[int][]string{
+	1: {"Charm Person", "Detect Magic", "Floating Disc", "Hold Portal", "Light", "Magic Missile", "Magic Mouth", "Protection from Evil", "Read Languages", "Read Magic", "Shield", "Sleep", "Ventriloquism"},
+}
+
+func randomSpell(class string, level int) string {
+	if class == "elf" || class == "magic-user" {
+		spellList := spellsArcane[level]
+		return spellList[rng.Intn(len(spellList))]
+	}
+	return ""
 }
