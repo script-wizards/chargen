@@ -419,7 +419,7 @@ func generateTitle(class string, level int) string {
 	return ""
 }
 
-var armors = map[int][]string{
+var armorsList = map[int][]string{
 	1: {"Leather armor (AC 7)"},
 	2: {"Leather armor (AC 7)", "Shield (+1 AC)"},
 	3: {"Chainmail (AC 5)"},
@@ -428,7 +428,7 @@ var armors = map[int][]string{
 	6: {"Plate armor (AC 3)", "Shield (+1 AC)"},
 }
 
-var weapons = map[int][]string{
+var weaponsList = map[int][]string{
 	1:  {"Battle axe - 1d8, melee, slow, 2H"},
 	2:  {"Crossbow - 1d4, missile (80/160/240), reload, slow, 2H", "20 bolts"},
 	3:  {"Hand axe - 1d6, melee, missile (10/20/30)"},
@@ -450,7 +450,7 @@ var weaponsCleric = map[int][]string{
 	4: {"War hammer - 1d6, blunt, melee"},
 }
 
-var gears = map[int][]string{
+var gearsList = map[int][]string{
 	1:  {"Crowbar"},
 	2:  {"Hammer", "12 iron spikes"},
 	3:  {"Holy water"},
@@ -465,8 +465,28 @@ var gears = map[int][]string{
 	12: {"Wolfsbane (1 bunch)"},
 }
 
+func uniqueNumbers(n, max int) []int {
+	if n > max {
+		return nil
+	}
+
+	nums := make([]int, n)
+	used := make(map[int]bool)
+
+	for i := 0; i < n; i++ {
+		num := rand.Intn(max)
+		for used[num] {
+			num = rand.Intn(max)
+		}
+		nums[i] = num
+		used[num] = true
+	}
+
+	return nums
+}
+
 func generateInventory(class string) []string {
-	armor := armors[roll(6)-1]
+	armor := armorsList[roll(6)-1]
 	switch class {
 	case "magic-user":
 		armor = nil
@@ -474,59 +494,37 @@ func generateInventory(class string) []string {
 		armor = []string{"Leather armor (AC 7)"}
 	}
 
-	weapon := make([]string, 0, 2)
-	weaponMap := make(map[string]bool)
+	weapon := make([]string, 0, 10)
 	switch class {
 	case "cleric":
-		for len(weapon) < 2 {
-			weapons := weaponsCleric[roll(4)-1]
-			for _, w := range weapons {
-				if !weaponMap[w] {
-					weapon = append(weapon, w)
-					weaponMap[w] = true
-					break
-				}
-			}
-		}
+		n := uniqueNumbers(2, len(weaponsCleric))
+		weapon = append(weapon, weaponsCleric[n[0]]...)
+		weapon = append(weapon, weaponsCleric[n[1]]...)
 	case "magic-user":
 		weapon = append(weapon, "Dagger - 1d4, melee, missile (10/20/30)")
 	default:
-		for len(weapon) < 2 {
-			weapons := weapons[roll(12)-1]
-			for _, w := range weapons {
-				if !weaponMap[w] {
-					weapon = append(weapon, w)
-					weaponMap[w] = true
-					break
-				}
-			}
-		}
+		n := uniqueNumbers(2, len(weaponsList))
+		weapon = append(weapon, weaponsList[n[0]]...)
+		weapon = append(weapon, weaponsList[n[1]]...)
 	}
 
-	gear := make([]string, 0, 3)
-	gearMap := make(map[string]bool)
-	for len(gear) < 3 {
-		items := gears[roll(12)-1]
-		for _, item := range items {
-			if !gearMap[item] {
-				gear = append(gear, item)
-				gearMap[item] = true
-				break
-			}
-		}
-	}
+	gears := make([]string, 0, 10)
+	n := uniqueNumbers(2, len(gearsList))
+	gears = append(gears, gearsList[n[0]]...)
+	gears = append(gears, gearsList[n[1]]...)
+
 	switch class {
 	case "cleric":
-		gear = append(gear, "Holy symbol")
+		gears = append(gears, "Holy symbol")
 	case "thief":
-		gear = append(gear, "Thieves' tools")
+		gears = append(gears, "Thieves' tools")
 	case "magic-user":
-		gear = append(gear, "Spellbook: "+randomSpell(class, 1))
+		gears = append(gears, "Spellbook: "+randomSpell(class, 1))
 	case "elf":
-		gear = append(gear, "Spellbook: "+randomSpell(class, 1))
+		gears = append(gears, "Spellbook: "+randomSpell(class, 1))
 	}
 
-	return append(armor, append(weapon, gear...)...)
+	return append(armor, append(weapon, gears...)...)
 }
 
 func (c *Character) Initiative() int {
