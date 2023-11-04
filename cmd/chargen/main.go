@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"slices"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/script-wizards/chargen/pkg/character"
@@ -43,13 +45,32 @@ func main() {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		err = tmpl.Execute(w, nil)
+		data := struct {
+			Msg string
+		}{
+			Msg: random404(),
+		}
+		err = tmpl.Execute(w, data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	})
 	log.Fatal(http.ListenAndServe(":"+port, r))
+}
+
+func random404() string {
+	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	messages := []string{
+		"Impossible. Perhaps the archives are incomplete.",
+		"This page is too strong for you, traveler.",
+		"This page is in another castle.",
+		"One does not simply walk into this page.",
+		"It's dangerous to go alone, take this link back home.",
+		"\"DID YOU PUT THIS PAGE IN THE GOBLET OF FIRE\", Dumbledore said calmly.",
+	}
+	return messages[rng.Intn(len(messages))]
 }
 
 func check(err error) {

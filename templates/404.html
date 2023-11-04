@@ -19,6 +19,7 @@
         background-color: #212121;
         margin: 0 25px 0 25px;
         font-family: "Courier New", Courier, monospace;
+        width: 100vw;
       }
       p,
       pre {
@@ -76,14 +77,19 @@
         background-color: #212121;
         padding: 5px;
       }
+      .container {
+        width: 80%;
+        margin: auto;
+        word-wrap: break-word;
+      }
     </style>
   </head>
   <body>
-    <br /><br />
-    <div style="text-align: left">
-      <span id="a">merlin@scriptwizards.org</span>:<span id="b">~</span
-      ><span id="c">$</span> cat 404.txt
-      <pre>
+    <div class="container">
+      <br /><br />
+      <div style="text-align: left">
+        <pre>
+merlin@scriptwizards.org:~$ cat 404.txt
 ___   ___  ________  ___   ___
 |\  \ |\  \|\   __  \|\  \ |\  \
 \ \  \\_\  \ \  \|\  \ \  \\_\  \
@@ -91,11 +97,10 @@ ___   ___  ________  ___   ___
   \|_____|\  \ \  \\\  \|_____|\  \
          \ \__\ \_______\     \ \__\
           \|__|\|_______|      \|__|
-      </pre>
-      <span id="d">ERR!</span> 404 Not Found: We were unable to find the
-      requested page.<br /><br /><a href="https://chargen.scriptwizards.org"
-        >Return</a
-      >
+        </pre>
+        <span>{{.Msg}}</span>
+        <br /><br /><a href="https://chargen.scriptwizards.org">Return</a>
+      </div>
     </div>
     <footer>
       Copyright © 2023 Script Wizards —
