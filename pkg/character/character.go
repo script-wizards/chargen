@@ -650,7 +650,20 @@ var abilitiesMap = map[string][]string{
 }
 
 var spellsArcane = map[int][]string{
-	1: {"Charm Person", "Detect Magic", "Floating Disc", "Hold Portal", "Light", "Magic Missile", "Magic Mouth", "Protection from Evil", "Read Languages", "Read Magic", "Shield", "Sleep", "Ventriloquism"},
+	1: {
+		"Charm Person",
+		"Detect Magic",
+		"Floating Disc",
+		"Hold Portal",
+		"Light",
+		"Magic Missile",
+		"Protection from Evil",
+		"Read Languages",
+		"Read Magic",
+		"Shield",
+		"Sleep",
+		"Ventriloquism",
+	},
 }
 
 func randomSpell(class string, level int) string {
