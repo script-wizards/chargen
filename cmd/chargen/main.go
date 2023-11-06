@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
-	"github.com/script-wizards/chargen/pkg/character"
+	"github.com/script-wizards/chargen/internal/character"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )

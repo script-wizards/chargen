@@ -157,7 +157,7 @@ func NewRandomChar() *Character {
 		SaveBreath:   saves[3],
 		SaveSpells:   saves[4],
 		HitDie:       hitDie,
-		HitPoints:    roll(hitDie),
+		HitPoints:    roll(hitDie) + calcMod(CON),
 	}
 }
 

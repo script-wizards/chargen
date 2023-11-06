@@ -95,7 +95,7 @@
 │ CON  {{printf "%2d" .CON}}  {{printf "%+2d" .ModCON}}  Hit Points                       │             │
 │ CHA  {{printf "%2d" .CHA}}      {{printf "%-30s" (printf "%+d/%d/%d React/Retainers/Morale" (index .ModCHA 0) (index .ModCHA 1) (index .ModCHA 2)) }}   │             │
 ├COMBAT────────────────┬SAVING THROWS───────────┼MOVEMENT─────┤
-│ Hit Points (1d{{.HitDie}})  {{printf "%2d" .HitPoints}} │ Death/Poison        {{printf "%2d" .SaveDeath}} │ OV   90mi/d │
+│ HP (1d{{.HitDie}}{{printf "%+2d" .ModCON}})        {{printf "%2d" .HitPoints}} │ Death/Poison        {{printf "%2d" .SaveDeath}} │ OV   90mi/d │
 │ Armor Class       {{printf "%2d" .ArmorClass}} │ Wands               {{printf "%2d" .SaveWands}} │ EX   120'/t │
 │ Melee hit/dmg     {{printf "%+2d" .ModSTR}} │ Paralyze/Petrify    {{printf "%2d" .SaveParalyze}} │ EN    40'/r │
 │ Missile hit       {{printf "%+2d" .ModDEX}} │ Breath Attacks      {{printf "%2d" .SaveBreath}} │ Doors   {{.OpenDoors}}/6 │
