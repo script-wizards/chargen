@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width" />
+    <meta charset="UTF-8" />
     <title>chargen | Script Wizards</title>
     <link
       rel="icon"
@@ -117,16 +117,15 @@
 │ {{printf "%-58s" (index .Omens 3)}}│
 │ {{printf "%-58s" (index .Omens 4)}}│
 └───────────────────────────────────────────────────────────┘
-</pre
-    >
-    <div class="details">
-      {{.Details}}<br />
-      <b>Starting Gear: </b>
-      {{.Gear}}<br />
-      <b>{{(index .Questions 0)}}</b> {{index .Answers 0}}<br />
-      <b>{{(index .Questions 1)}}</b>
-      {{index .Answers 1}}
-    </div>
+<div class="details">
+  {{.Details}}<br />
+  <b>Starting Gear: </b>
+  {{.Gear}}<br />
+  <b>{{(index .Questions 0)}}</b> {{index .Answers 0}}<br />
+  <b>{{(index .Questions 1)}}</b>
+  {{index .Answers 1}}
+</div>
+</pre>
     <footer>
       <div class="no-print">
         <a href="/cairn">Reroll</a><span> — </span
