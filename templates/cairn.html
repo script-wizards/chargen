@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8" name="viewport" content="width=device-width" />
     <title>chargen | Script Wizards</title>
     <link
       rel="icon"
@@ -20,17 +20,23 @@
         margin: 0 25px 0 25px;
         font-family: "Courier New", Courier, monospace;
       }
-      p,
       pre {
         margin-top: 0;
         margin-bottom: 0;
         background-color: transparent;
         font-family: "Courier New", Courier, monospace;
+      }
+      p {
+        word-wrap: break-word;
+        max-width: 61ch;
         white-space: pre-wrap; /* Since CSS 2.1 */
         white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
         white-space: -pre-wrap; /* Opera 4-6 */
         white-space: -o-pre-wrap; /* Opera 7 */
-        word-wrap: break-word; /* Internet Explorer 5.5+ */
+        margin-top: 0;
+        margin-bottom: 0;
+        background-color: transparent;
+        font-family: "Courier New", Courier, monospace;
       }
       a:link {
         color: #ffa227;
@@ -54,11 +60,6 @@
       }
       .print-only {
         display: none;
-      }
-      @media (min-width: 641px) {
-        pre {
-          max-width: 63ch;
-        }
       }
       @media print {
         body {
@@ -125,16 +126,14 @@
 │ {{printf "%-58s" (index .Omens 4)}}│
 └───────────────────────────────────────────────────────────┘</pre
     >
-    <pre>
-<b>{{.Background}}</b>
-{{.Details}}
-<b>Starting Gear</b>
-{{range .Gear}}{{printf "- %s<br />" .}}{{end}}
-<b>{{(index .Questions 0)}}</b>
-{{(index .Answers 0)}}
-<b>{{(index .Questions 1)}}</b>
-{{(index .Answers 1)}}
-    </pre>
+    <p><b>{{.Background}}</b></p>
+    <p>{{.Details}}</p>
+    <p><b>Starting Gear</b></p>
+    <p>{{range .Gear}}{{printf "- %s<br />" .}}{{end}}</p>
+    <p><b>{{(index .Questions 0)}}</b></p>
+    <p>{{(index .Answers 0)}}</p>
+    <p><b>{{(index .Questions 1)}}</b></p>
+    <p>{{(index .Answers 1)}}</p>
     <footer>
       <div class="no-print">
         <a href="/cairn">Reroll</a><span> — </span
