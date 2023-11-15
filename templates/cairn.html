@@ -80,62 +80,67 @@
   </head>
   <body>
     <pre>
-┌NAME──────────────────────────────────┬───────────────────┐
-│ {{printf "%-9s" .Name}}                            │                   │
-├BACKGROUND────────────────────────────┤                   │
-│ {{printf "%-14s" .Background}}                       │                   │
-├ABILITIES┬─────────┬─────────┬────────┤                   │
-│         │         │         │        │                   │
-│         │         │         │        │                   │
-│         │         │         │        │                   │
-│      {{printf "%2d" .STR}} │      {{printf "%2d" .DEX}} │      {{printf "%2d" .WIL}} │ HP: {{printf "%2d" .HP}} │                   │
-├─────────┴┬───┬────┴──┬───┬──┴───┬────┤                   │
-│ DEPRIVED │   │ ARMOR │ {{.Armor}} │ GOLD │ {{printf "%2d" .Gold}} │                   │
-└──────────┴───┴───────┴───┴──────┴────┴───────────────────┘
-┌TRAITS────────────────┬─────────────────────────┬─────────┐
-│ Physique: Statuesque │ Speech: Stuttering      │ Age: {{printf "%2d" .Age}} │
-│ Skin: Birthmarked    │ Clothing: Elegant       ├─────────┤
-│ Hair: Luxurious      │ Virtue: Disciplined     │         │
-│ Face: Rat-like       │ Vice: Aggressive        │         │
-├BONDS─────────────────┴─────────────────────────┴─────────┤
-│ You consumed a mischievous spirit that periodically      │
-│ wreaks havoc on your insides, demanding to be taken home.│
-│ It wants to keep you alive, at least until it is free.   │
-│ It candetect magic and knows quite a bit about The Woods.│
-├OMENS─────────────────────────────────────────────────────┤
-│ It feels like winter has arrived too quickly this year,  │
-│ frost and snows making their appearance much earlier than│
-│ expected. There is talk of a pattern to the frost found  │
-│ in windows, ponds, and cracks in the ground. It almost   │
-│ looks like a map.                                        │
-└──────────────────────────────────────────────────────────┘
+┌NAME──────────────────────────────────┬──────────────────────┐
+│ {{printf "%-9s" .Name}}                            │                      │
+├BACKGROUND────────────────────────────┤                      │
+│ {{printf "%-14s" .Background}}                       │                      │
+├ABILITIES┬─────────┬─────────┬────────┤                      │
+│         │         │         │        │                      │
+│         │         │         │        │                      │
+│         │         │         │        │                      │
+│      {{printf "%2d" .STR}} │      {{printf "%2d" .DEX}} │      {{printf "%2d" .WIL}} │ HP: {{printf "%2d" .HP}} │                      │
+├─────────┴┬───┬────┴──┬───┬──┴───┬────┤                      │
+│ DEPRIVED │   │ ARMOR │ {{.Armor}} │ GOLD │ {{printf "%2d" .Gold}} │                      │
+└──────────┴───┴───────┴───┴──────┴────┴──────────────────────┘
+┌TRAITS────────────────┬─────────────────────────┬────────────┐
+│ Physique: {{printf "%-10s" (index .Traits 0)}} │ Speech: {{printf "%-15s" (index .Traits 4)}} │ Age: {{printf "%2d" .Age}}    │
+│ Skin: {{printf "%-14s" (index .Traits 1)}} │ Clothing: {{printf "%-13s" (index .Traits 5)}} ├────────────┤
+│ Hair: {{printf "%-14s" (index .Traits 2)}} │ Virtue: {{printf "%-15s" (index .Traits 6)}} │            │
+│ Face: {{printf "%-14s" (index .Traits 3)}} │ Vice: {{printf "%-17s" (index .Traits 2)}} │            │
+├BONDS─────────────────┴─────────────────────────┴────────────┤
+│ {{printf "%-60s" (index .Bonds 0)}}│
+│ {{printf "%-60s" (index .Bonds 1)}}│
+│ {{printf "%-60s" (index .Bonds 2)}}│
+│ {{printf "%-60s" (index .Bonds 3)}}│
+├OMENS────────────────────────────────────────────────────────┤
+│ {{printf "%-60s" (index .Omens 0)}}│
+│ {{printf "%-60s" (index .Omens 1)}}│
+│ {{printf "%-60s" (index .Omens 2)}}│
+│ {{printf "%-60s" (index .Omens 3)}}│
+│ {{printf "%-60s" (index .Omens 4)}}│
+└─────────────────────────────────────────────────────────────┘
  INVENTORY                                          FATIGUE
-┌──────────────────────────────────────────────────────┬───┐
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-├──────────────────────────────────────────────────────┼───┤
-│                                                      │   │
-└──────────────────────────────────────────────────────┴───┘
+┌─────────────────────────────────────────────────────────┬───┐
+│ {{printf "%-56s" (index .Inventory 0)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 1)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 2)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 3)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 4)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 5)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 6)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 7)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 8)}}│   │
+├─────────────────────────────────────────────────────────┼───┤
+│ {{printf "%-56s" (index .Inventory 9)}}│   │
+└─────────────────────────────────────────────────────────┴───┘
     </pre>
     <footer>
       <pre
         class="no-print"
       ><a href="." >Reroll</a><span> — </span><a href="/cairn-blank">Clear</a></pre>
+      Cairn 2nd Edition by
+      <a href="https://newschoolrevolution.com/">Yochai Gal</a>.
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+        >CC-BY SA 4.0</a
+      ><br />
       Copyright © 2023 Script Wizards —
       <a href="https://scriptwizards.org">scriptwizards.org</a>
     </footer>
