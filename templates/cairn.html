@@ -19,6 +19,8 @@
         background-color: #212121;
         margin: 0 25px 0 25px;
         font-family: "Courier New", Courier, monospace;
+        word-wrap: break-word;
+        max-width: 63ch;
       }
       p,
       pre {
@@ -65,6 +67,9 @@
         .print-only {
           display: inline;
         }
+        .pagebreak {
+          page-break-before: always;
+        }
       }
       footer {
         position: fixed;
@@ -79,6 +84,7 @@
     </style>
   </head>
   <body>
+    <span class="no-print"><br /><br /></span>
     <pre>
 ┌NAME──────────────────────────────────┬──────────────────────┐
 │ {{printf "%-10s" .Name}}                           │                      │
@@ -108,34 +114,18 @@
 │ {{printf "%-60s" (index .Omens 2)}}│
 │ {{printf "%-60s" (index .Omens 3)}}│
 │ {{printf "%-60s" (index .Omens 4)}}│
-└─────────────────────────────────────────────────────────────┘
- INVENTORY
-┌─────────────────────────────────────────────────────────┬───┐
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-├─────────────────────────────────────────────────────────┼───┤
-│                                                         │   │
-└─────────────────────────────────────────────────────────┴───┘
-    </pre>
+└─────────────────────────────────────────────────────────────┘</pre
+    >
+    <p><b>{{.Background}}</b></p>
+    <p>{{.Details}}</p>
+    <p><b>{{(index .Questions 0)}}</b></p>
+    <p>{{(index .Answers 0)}}</p>
+    <p><b>{{(index .Questions 1)}}</b></p>
+    <p>{{(index .Answers 1)}}</p>
     <footer>
       <pre
         class="no-print"
-      ><a href="." >Reroll</a><span> — </span><a href="/cairn-blank">Clear</a></pre>
+      ><a href="/cairn" >Reroll</a><span> — </span><a href="/cairn-blank">Clear</a></pre>
       Cairn 2nd Edition by
       <a href="https://newschoolrevolution.com/">Yochai Gal</a>.
       <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"

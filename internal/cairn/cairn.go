@@ -28,6 +28,9 @@ type Character struct {
 	Omens      []string
 	Inventory  []string
 	Gold       int
+	Details    string
+	Questions  []string
+	Answers    []string
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -38,6 +41,17 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	data := NewCairnCharacter()
 	if err := tmpl.Execute(w, data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func HandleBlank(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/cairn-blank.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	if err := tmpl.Execute(w, nil); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -76,6 +90,22 @@ func trait() []string {
 	return traitsList
 }
 
+func details(background string) string {
+	return backgroundDetails[background]
+}
+
+func questions(background string) []string {
+	return backgroundQuestions[background]
+}
+
+func answers(background string) []string {
+	answers := make([]string, 2)
+	for i, answer := range backgroundAnswers[background] {
+		answers[i] = answer[rng.Intn(len(answer))]
+	}
+	return answers
+}
+
 func NewCairnCharacter() *Character {
 	background := background()
 	bond := "You consumed a mischievous spirit that periodically wreaks havoc on your insides, demanding to be taken home. It wants to keep you alive, at least until it is free. It can detect magic and knows quite a bit about The Woods."
@@ -96,5 +126,8 @@ func NewCairnCharacter() *Character {
 		Bonds:      bondLines,
 		Omens:      omenLines,
 		Gold:       dice.Roll3d6(),
+		Details:    details(background),
+		Questions:  questions(background),
+		Answers:    answers(background),
 	}
 }
