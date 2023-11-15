@@ -77,7 +77,7 @@
         }
       }
       footer {
-        position: fixed;
+        position: relative;
         bottom: 0;
         left: 0;
         right: 0;
@@ -121,23 +121,14 @@
 │ {{printf "%-58s" (index .Omens 3)}}│
 │ {{printf "%-58s" (index .Omens 4)}}│
 └───────────────────────────────────────────────────────────┘
- <b>{{.Background}}</b>
- {{index .Details 0}}
- {{index .Details 1}}
- {{index .Details 2}}
- {{index .Details 3}}
- {{index .Details 4}}
- <b>Starting Gear</b>
-{{range .Gear}}{{printf " - %s<br />" .}}{{end}}
-</pre>
-    <details>
-      <summary>{{(index .Questions 0)}}</summary>
-      {{index .Answers 0}}
-    </details>
-    <details>
-      <summary>{{(index .Questions 1)}}</summary>
-      {{index .Answers 1}}
-    </details>
+</pre
+    >
+    {{.Details}}<br />
+    <b>Starting Gear: </b>
+    {{.Gear}}<br />
+    <b>{{(index .Questions 0)}}</b> {{index .Answers 0}}<br />
+    <b>{{(index .Questions 1)}}</b>
+    {{index .Answers 1}}
     <footer>
       <div class="no-print">
         <a href="/cairn">Reroll</a><span> — </span

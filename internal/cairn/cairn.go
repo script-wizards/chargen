@@ -28,8 +28,8 @@ type Character struct {
 	Omens      []string
 	Inventory  []string
 	Gold       int
-	Details    []string
-	Gear       []string
+	Details    string
+	Gear       string
 	Questions  []string
 	Answers    []string
 }
@@ -105,15 +105,12 @@ func omens() []string {
 	return lines
 }
 
-func details(background string) []string {
-	lines := make([]string, 5)
-	src := splitLines(backgroundDetails[background], 57)
-	copy(lines, src)
-	return lines
+func details(background string) string {
+	return backgroundDetails[background]
 }
 
-func gear(background string) []string {
-	return backgroundGear[background]
+func gear(background string) string {
+	return strings.Join(backgroundGear[background], ", ")
 }
 
 func questions(background string) []string {
