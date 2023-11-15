@@ -95,18 +95,6 @@ func NewCairnCharacter() *Character {
 		Age:        dice.Roll(20) + dice.Roll(20) + 10,
 		Bonds:      bondLines,
 		Omens:      omenLines,
-		Inventory: []string{
-			"Torch □ □ □",
-			"Rations □ □ □",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-		},
-		Gold: dice.Roll3d6(),
+		Gold:       dice.Roll3d6(),
 	}
 }
