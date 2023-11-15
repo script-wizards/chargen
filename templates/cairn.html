@@ -19,8 +19,6 @@
         background-color: #212121;
         margin: 0 25px 0 25px;
         font-family: "Courier New", Courier, monospace;
-        max-width: 61ch;
-        word-wrap: break-word;
       }
       p,
       pre {
@@ -29,13 +27,11 @@
         background-color: transparent;
         font-family: "Courier New", Courier, monospace;
       }
-      details {
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .details-text {
-        white-space: nowrap;
+      .details {
+        max-width: 40em;
+        word-wrap: break-word;
+        margin-left: 25px;
+        font-size: 12px;
       }
       a:link {
         color: #ffa227;
@@ -77,7 +73,7 @@
         }
       }
       footer {
-        position: relative;
+        position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
@@ -123,12 +119,14 @@
 └───────────────────────────────────────────────────────────┘
 </pre
     >
-    {{.Details}}<br />
-    <b>Starting Gear: </b>
-    {{.Gear}}<br />
-    <b>{{(index .Questions 0)}}</b> {{index .Answers 0}}<br />
-    <b>{{(index .Questions 1)}}</b>
-    {{index .Answers 1}}
+    <div class="details">
+      {{.Details}}<br />
+      <b>Starting Gear: </b>
+      {{.Gear}}<br />
+      <b>{{(index .Questions 0)}}</b> {{index .Answers 0}}<br />
+      <b>{{(index .Questions 1)}}</b>
+      {{index .Answers 1}}
+    </div>
     <footer>
       <div class="no-print">
         <a href="/cairn">Reroll</a><span> — </span
