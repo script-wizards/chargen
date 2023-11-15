@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>chargen | Script Wizards</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png"
+    />
+    <style>
+      html {
+        display: table;
+        margin: auto;
+      }
+      body {
+        display: table-cell;
+        color: #ece3d0;
+        background-color: #212121;
+        margin: 0 25px 0 25px;
+        font-family: "Courier New", Courier, monospace;
+        word-wrap: break-word;
+        max-width: 63ch;
+      }
+      p,
+      pre {
+        margin-top: 0;
+        margin-bottom: 0;
+        background-color: transparent;
+        font-family: "Courier New", Courier, monospace;
+      }
+      a:link {
+        color: #ffa227;
+        background-color: transparent;
+        text-decoration: none;
+      }
+      a:visited {
+        color: #ffa227;
+        background-color: transparent;
+        text-decoration: none;
+      }
+      a:hover {
+        color: #ffa227;
+        background-color: transparent;
+        text-decoration: underline;
+      }
+      a:active {
+        color: #ffa227;
+        background-color: transparent;
+        text-decoration: underline;
+      }
+      .print-only {
+        display: none;
+      }
+      @media print {
+        body {
+          color: #000000;
+          background-color: #ffffff;
+        }
+        a,
+        footer {
+          color: #000000 !important;
+        }
+        .no-print {
+          display: none;
+        }
+        .print-only {
+          display: inline;
+        }
+        .pagebreak {
+          page-break-before: always;
+        }
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: #ece3d0;
+        background-color: #212121;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <span class="no-print"><br /></span>
+    <pre>
+┌NAME──────────────────────────────────┬──────────────────────┐
+│ {{printf "%-10s" .Name}}                           │                      │
+├BACKGROUND────────────────────────────┤                      │
+│ {{printf "%-14s" .Background}}                       │                      │
+├ABILITIES┬─────────┬─────────┬────────┤                      │
+│         │         │         │        │                      │
+│         │         │         │        │                      │
+│         │         │         │        │                      │
+│      {{printf "%2d" .STR}} │      {{printf "%2d" .DEX}} │      {{printf "%2d" .WIL}} │ HP: {{printf "%2d" .HP}} │                      │
+├─────────┴┬───┬────┴──┬───┬──┴───┬────┤                      │
+│ DEPRIVED │   │ ARMOR │   │ GOLD │ {{printf "%2d" .Gold}} │                      │
+└──────────┴───┴───────┴───┴──────┴────┴──────────────────────┘
+┌TRAITS────────────────┬─────────────────────────┬────────────┐
+│ Physique: {{printf "%-10s" (index .Traits 0)}} │ Speech: {{printf "%-15s" (index .Traits 4)}} │ Age: {{printf "%2d" .Age}}    │
+│ Skin: {{printf "%-14s" (index .Traits 1)}} │ Clothing: {{printf "%-13s" (index .Traits 5)}} ├────────────┤
+│ Hair: {{printf "%-14s" (index .Traits 2)}} │ Virtue: {{printf "%-15s" (index .Traits 6)}} │            │
+│ Face: {{printf "%-14s" (index .Traits 3)}} │ Vice: {{printf "%-17s" (index .Traits 2)}} │            │
+├BONDS─────────────────┴─────────────────────────┴────────────┤
+│ {{printf "%-60s" (index .Bonds 0)}}│
+│ {{printf "%-60s" (index .Bonds 1)}}│
+│ {{printf "%-60s" (index .Bonds 2)}}│
+│ {{printf "%-60s" (index .Bonds 3)}}│
+├OMENS────────────────────────────────────────────────────────┤
+│ {{printf "%-60s" (index .Omens 0)}}│
+│ {{printf "%-60s" (index .Omens 1)}}│
+│ {{printf "%-60s" (index .Omens 2)}}│
+│ {{printf "%-60s" (index .Omens 3)}}│
+│ {{printf "%-60s" (index .Omens 4)}}│
+└─────────────────────────────────────────────────────────────┘</pre
+    >
+    <p><b>{{.Background}}</b></p>
+    <p>{{.Details}}</p>
+    <p><b>Starting Gear</b></p>
+    <p>{{range .Gear}}{{printf "- %s<br />" .}}{{end}}</p>
+    <p><b>{{(index .Questions 0)}}</b></p>
+    <p>{{(index .Answers 0)}}</p>
+    <p><b>{{(index .Questions 1)}}</b></p>
+    <p>{{(index .Answers 1)}}</p>
+    <footer>
+      <pre
+        class="no-print"
+      ><a href="/cairn" >Reroll</a><span> — </span><a href="/cairn-blank">Clear</a></pre>
+      Cairn 2nd Edition by
+      <a href="https://newschoolrevolution.com/">Yochai Gal</a>.
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+        >CC-BY SA 4.0</a
+      ><br />
+      Copyright © 2023 Script Wizards —
+      <a href="https://scriptwizards.org">scriptwizards.org</a>
+    </footer>
+  </body>
+</html>

@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
-)
 
-var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
+	"github.com/script-wizards/chargen/internal/dice"
+)
 
 type Character struct {
 	Class        string
@@ -34,12 +34,10 @@ type Character struct {
 	ArmorClass   int
 }
 
-func roll(die int) int {
-	return 1 + rng.Intn(die)
-}
+var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 func roll4d6kh3() int {
-	rolls := []int{roll(6), roll(6), roll(6), roll(6)}
+	rolls := []int{dice.Roll(6), dice.Roll(6), dice.Roll(6), dice.Roll(6)}
 	sort.Ints(rolls)
 	return rolls[1] + rolls[2] + rolls[3]
 }
@@ -52,10 +50,6 @@ func rollStats() []int {
 	CON := roll4d6kh3()
 	CHA := roll4d6kh3()
 	return []int{STR, INT, WIS, DEX, CON, CHA}
-}
-
-func roll3d6() int {
-	return roll(6) + roll(6) + roll(6)
 }
 
 func unpack(src []int, dst ...*int) {
@@ -117,7 +111,7 @@ func NewCharClass(class string) *Character {
 		DEX:          DEX,
 		CON:          CON,
 		CHA:          CHA,
-		Gold:         roll3d6(),
+		Gold:         dice.Roll3d6(),
 		Inventory:    generateInventory(class),
 		Abilities:    classAbilities(class),
 		SaveDeath:    saves[0],
@@ -126,7 +120,7 @@ func NewCharClass(class string) *Character {
 		SaveBreath:   saves[3],
 		SaveSpells:   saves[4],
 		HitDie:       hitDie,
-		HitPoints:    roll(hitDie),
+		HitPoints:    dice.Roll(hitDie),
 	}
 }
 
@@ -148,7 +142,7 @@ func NewRandomChar() *Character {
 		DEX:          DEX,
 		CON:          CON,
 		CHA:          CHA,
-		Gold:         roll3d6(),
+		Gold:         dice.Roll3d6(),
 		Inventory:    generateInventory(class),
 		Abilities:    classAbilities(class),
 		SaveDeath:    saves[0],
@@ -157,7 +151,7 @@ func NewRandomChar() *Character {
 		SaveBreath:   saves[3],
 		SaveSpells:   saves[4],
 		HitDie:       hitDie,
-		HitPoints:    roll(hitDie) + calcMod(CON),
+		HitPoints:    dice.Roll(hitDie) + calcMod(CON),
 	}
 }
 
@@ -486,7 +480,7 @@ func uniqueNumbers(n, max int) []int {
 }
 
 func generateInventory(class string) []string {
-	armor := armorsList[roll(6)-1]
+	armor := armorsList[dice.Roll(6)-1]
 	switch class {
 	case "magic-user":
 		armor = nil

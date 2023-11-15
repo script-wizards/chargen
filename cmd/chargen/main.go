@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
+	"github.com/script-wizards/chargen/internal/cairn"
 	"github.com/script-wizards/chargen/internal/character"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -39,6 +40,8 @@ func main() {
 			return
 		}
 	})
+	r.Get("/cairn", cairn.Handler)
+	r.Get("/cairn-blank", cairn.HandleBlank)
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		tmpl, err := template.ParseFiles("templates/404.html")
 		if err != nil {
