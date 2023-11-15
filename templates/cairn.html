@@ -19,24 +19,23 @@
         background-color: #212121;
         margin: 0 25px 0 25px;
         font-family: "Courier New", Courier, monospace;
+        max-width: 61ch;
+        word-wrap: break-word;
       }
+      p,
       pre {
         margin-top: 0;
         margin-bottom: 0;
         background-color: transparent;
         font-family: "Courier New", Courier, monospace;
       }
-      p {
-        word-wrap: break-word;
-        max-width: 61ch;
-        white-space: pre-wrap; /* Since CSS 2.1 */
-        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-        white-space: -pre-wrap; /* Opera 4-6 */
-        white-space: -o-pre-wrap; /* Opera 7 */
-        margin-top: 0;
-        margin-bottom: 0;
-        background-color: transparent;
-        font-family: "Courier New", Courier, monospace;
+      details {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .details-text {
+        white-space: nowrap;
       }
       a:link {
         color: #ffa227;
@@ -75,9 +74,6 @@
         }
         .print-only {
           display: inline;
-        }
-        .pagebreak {
-          page-break-before: always;
         }
       }
       footer {
@@ -124,16 +120,24 @@
 │ {{printf "%-58s" (index .Omens 2)}}│
 │ {{printf "%-58s" (index .Omens 3)}}│
 │ {{printf "%-58s" (index .Omens 4)}}│
-└───────────────────────────────────────────────────────────┘</pre
-    >
-    <p><b>{{.Background}}</b></p>
-    <p>{{.Details}}</p>
-    <p><b>Starting Gear</b></p>
-    <p>{{range .Gear}}{{printf "- %s<br />" .}}{{end}}</p>
-    <p><b>{{(index .Questions 0)}}</b></p>
-    <p>{{(index .Answers 0)}}</p>
-    <p><b>{{(index .Questions 1)}}</b></p>
-    <p>{{(index .Answers 1)}}</p>
+└───────────────────────────────────────────────────────────┘
+ <b>{{.Background}}</b>
+ {{index .Details 0}}
+ {{index .Details 1}}
+ {{index .Details 2}}
+ {{index .Details 3}}
+ {{index .Details 4}}
+ <b>Starting Gear</b>
+{{range .Gear}}{{printf " - %s<br />" .}}{{end}}
+</pre>
+    <details>
+      <summary>{{(index .Questions 0)}}</summary>
+      {{index .Answers 0}}
+    </details>
+    <details>
+      <summary>{{(index .Questions 1)}}</summary>
+      {{index .Answers 1}}
+    </details>
     <footer>
       <div class="no-print">
         <a href="/cairn">Reroll</a><span> — </span
