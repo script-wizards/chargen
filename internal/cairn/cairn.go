@@ -92,15 +92,15 @@ func trait() []string {
 }
 
 func bonds() []string {
-	lines := make([]string, 4)
-	src := splitLines(bondsList[rng.Intn(len(bondsList))], 59)
+	lines := make([]string, 5)
+	src := splitLines(bondsList[rng.Intn(len(bondsList))], 57)
 	copy(lines, src)
 	return lines
 }
 
 func omens() []string {
 	lines := make([]string, 5)
-	src := splitLines(omensList[rng.Intn(len(omensList))], 59)
+	src := splitLines(omensList[rng.Intn(len(omensList))], 57)
 	copy(lines, src)
 	return lines
 }

@@ -26,10 +26,11 @@
         margin-bottom: 0;
         background-color: transparent;
         font-family: "Courier New", Courier, monospace;
-      }
-      .wrap {
-        max-width: 63ch;
-        word-wrap: break-word;
+        white-space: pre-wrap; /* Since CSS 2.1 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word; /* Internet Explorer 5.5+ */
       }
       a:link {
         color: #ffa227;
@@ -88,50 +89,52 @@
   <body>
     <span class="no-print"><br /></span>
     <pre>
-┌NAME──────────────────────────────────┬──────────────────────┐
-│ {{printf "%-10s" .Name}}                           │                      │
-├BACKGROUND────────────────────────────┤                      │
-│ {{printf "%-14s" .Background}}                       │                      │
-├ABILITIES┬─────────┬─────────┬────────┤                      │
-│         │         │         │        │                      │
-│         │         │         │        │                      │
-│         │         │         │        │                      │
-│      {{printf "%2d" .STR}} │      {{printf "%2d" .DEX}} │      {{printf "%2d" .WIL}} │ HP: {{printf "%2d" .HP}} │                      │
-├─────────┴┬───┬────┴──┬───┬──┴───┬────┤                      │
-│ DEPRIVED │   │ ARMOR │   │ GOLD │ {{printf "%2d" .Gold}} │                      │
-└──────────┴───┴───────┴───┴──────┴────┴──────────────────────┘
-┌TRAITS────────────────┬─────────────────────────┬────────────┐
-│ Physique: {{printf "%-10s" (index .Traits 0)}} │ Speech: {{printf "%-15s" (index .Traits 4)}} │ Age: {{printf "%2d" .Age}}    │
-│ Skin: {{printf "%-14s" (index .Traits 1)}} │ Clothing: {{printf "%-13s" (index .Traits 5)}} ├────────────┤
-│ Hair: {{printf "%-14s" (index .Traits 2)}} │ Virtue: {{printf "%-15s" (index .Traits 6)}} │            │
-│ Face: {{printf "%-14s" (index .Traits 3)}} │ Vice: {{printf "%-17s" (index .Traits 2)}} │            │
-├BONDS─────────────────┴─────────────────────────┴────────────┤
-│ {{printf "%-60s" (index .Bonds 0)}}│
-│ {{printf "%-60s" (index .Bonds 1)}}│
-│ {{printf "%-60s" (index .Bonds 2)}}│
-│ {{printf "%-60s" (index .Bonds 3)}}│
-├OMENS────────────────────────────────────────────────────────┤
-│ {{printf "%-60s" (index .Omens 0)}}│
-│ {{printf "%-60s" (index .Omens 1)}}│
-│ {{printf "%-60s" (index .Omens 2)}}│
-│ {{printf "%-60s" (index .Omens 3)}}│
-│ {{printf "%-60s" (index .Omens 4)}}│
-└─────────────────────────────────────────────────────────────┘</pre
+┌NAME──────────────────────────────────┬────────────────────┐
+│ {{printf "%-10s" .Name}}                           │                    │
+├BACKGROUND────────────────────────────┤                    │
+│ {{printf "%-14s" .Background}}                       │                    │
+├ABILITIES┬─────────┬─────────┬────────┤                    │
+│         │         │         │        │                    │
+│         │         │         │        │                    │
+│         │         │         │        │                    │
+│      {{printf "%2d" .STR}} │      {{printf "%2d" .DEX}} │      {{printf "%2d" .WIL}} │ HP: {{printf "%2d" .HP}} │                    │
+├─────────┴┬───┬────┴──┬───┬──┴───┬────┤                    │
+│ DEPRIVED │   │ ARMOR │   │ GOLD │ {{printf "%2d" .Gold}} │                    │
+└──────────┴───┴───────┴───┴──────┴────┴────────────────────┘
+┌TRAITS────────────────┬─────────────────────────┬──────────┐
+│ Physique: {{printf "%-10s" (index .Traits 0)}} │ Speech: {{printf "%-15s" (index .Traits 4)}} │ Age: {{printf "%2d" .Age}}  │
+│ Skin: {{printf "%-14s" (index .Traits 1)}} │ Clothing: {{printf "%-13s" (index .Traits 5)}} ├──────────┤
+│ Hair: {{printf "%-14s" (index .Traits 2)}} │ Virtue: {{printf "%-15s" (index .Traits 6)}} │          │
+│ Face: {{printf "%-14s" (index .Traits 3)}} │ Vice: {{printf "%-17s" (index .Traits 2)}} │          │
+├BONDS─────────────────┴─────────────────────────┴──────────┤
+│ {{printf "%-58s" (index .Bonds 0)}}│
+│ {{printf "%-58s" (index .Bonds 1)}}│
+│ {{printf "%-58s" (index .Bonds 2)}}│
+│ {{printf "%-58s" (index .Bonds 3)}}│
+│ {{printf "%-58s" (index .Bonds 4)}}│
+├OMENS──────────────────────────────────────────────────────┤
+│ {{printf "%-58s" (index .Omens 0)}}│
+│ {{printf "%-58s" (index .Omens 1)}}│
+│ {{printf "%-58s" (index .Omens 2)}}│
+│ {{printf "%-58s" (index .Omens 3)}}│
+│ {{printf "%-58s" (index .Omens 4)}}│
+└───────────────────────────────────────────────────────────┘</pre
     >
-    <div class="wrap">
-      <p><b>{{.Background}}</b></p>
-      <p>{{.Details}}</p>
-      <p><b>Starting Gear</b></p>
-      <p>{{range .Gear}}{{printf "- %s<br />" .}}{{end}}</p>
-      <p><b>{{(index .Questions 0)}}</b></p>
-      <p>{{(index .Answers 0)}}</p>
-      <p><b>{{(index .Questions 1)}}</b></p>
-      <p>{{(index .Answers 1)}}</p>
-    </div>
+    <pre>
+<b>{{.Background}}</b>
+{{.Details}}
+<b>Starting Gear</b>
+{{range .Gear}}{{printf "- %s<br />" .}}{{end}}
+<b>{{(index .Questions 0)}}</b>
+{{(index .Answers 0)}}
+<b>{{(index .Questions 1)}}</b>
+{{(index .Answers 1)}}
+    </pre>
     <footer>
-      <pre
-        class="no-print"
-      ><a href="/cairn" >Reroll</a><span> — </span><a href="/cairn-blank">Clear</a></pre>
+      <div class="no-print">
+        <a href="/cairn">Reroll</a><span> — </span
+        ><a href="/cairn-blank">Clear</a>
+      </div>
       Cairn 2nd Edition by
       <a href="https://newschoolrevolution.com/">Yochai Gal</a>.
       <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"
