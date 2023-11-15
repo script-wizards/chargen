@@ -29,6 +29,7 @@ type Character struct {
 	Inventory  []string
 	Gold       int
 	Details    string
+	Gear       []string
 	Questions  []string
 	Answers    []string
 }
@@ -90,8 +91,26 @@ func trait() []string {
 	return traitsList
 }
 
+func bonds() []string {
+	lines := make([]string, 4)
+	src := splitLines(bondsList[rng.Intn(len(bondsList))], 59)
+	copy(lines, src)
+	return lines
+}
+
+func omens() []string {
+	lines := make([]string, 5)
+	src := splitLines(omensList[rng.Intn(len(omensList))], 59)
+	copy(lines, src)
+	return lines
+}
+
 func details(background string) string {
 	return backgroundDetails[background]
+}
+
+func gear(background string) []string {
+	return backgroundGear[background]
 }
 
 func questions(background string) []string {
@@ -108,10 +127,6 @@ func answers(background string) []string {
 
 func NewCairnCharacter() *Character {
 	background := background()
-	bond := "You consumed a mischievous spirit that periodically wreaks havoc on your insides, demanding to be taken home. It wants to keep you alive, at least until it is free. It can detect magic and knows quite a bit about The Woods."
-	bondLines := splitLines(bond, 60)
-	omen := "It feels like winter has arrived too quickly this year, frost and snows making their appearance much earlier than expected. There is talk of a pattern to the frost found in windows, ponds, and cracks in the ground. It almost looks like a map."
-	omenLines := splitLines(omen, 60)
 	caser := cases.Title(language.English)
 	return &Character{
 		Name:       name(background),
@@ -123,10 +138,11 @@ func NewCairnCharacter() *Character {
 		Armor:      0,
 		Traits:     trait(),
 		Age:        dice.Roll(20) + dice.Roll(20) + 10,
-		Bonds:      bondLines,
-		Omens:      omenLines,
+		Bonds:      bonds(),
+		Omens:      omens(),
 		Gold:       dice.Roll3d6(),
 		Details:    details(background),
+		Gear:       gear(background),
 		Questions:  questions(background),
 		Answers:    answers(background),
 	}

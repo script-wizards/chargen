@@ -58,6 +58,52 @@ var (
 		{"aggressive", "bitter", "craven", "deceitful", "greedy", "lazy", "nervous", "rude", "vain", "vengeful"},
 	}
 
+	bondsList = []string{
+		"You inherited a Single Gem (500gp, cold and brittle) from a long-dead relative. It arrived with a warning: squander your newfound riches and a debt long thought forgotten would be called.",
+		"A distant cousin left you a small inheritance. Take 20Gp, and an Ornate Compass that always points towards something deep in The Woods.",
+		"You carry a Portrait in a locket (petty) of a past love who disappeared into The Woods long ago. Somehow, you know that they are still alive.",
+		"You found a Tiny Crystal Prism (petty) buried in the dirt. When held up to the light, it shows visions of an unknown location deep within The Woods. Sometimes, you feel a presence looking back at you.",
+		"You once freed a Naiad from a choked stream. In return, it gave you some Silver Moss. Swallow it near water and the creature will come, once, to repay its debt.",
+		"You inherited an old Journal, bound in bark. Each evening, its pages are filled with the events of the day, crassly from the journal’s perspective. The writing is crude, but accurate.",
+		"You protect a long-dormant family secret. Take one half of an Ancient Key (petty). They say that if joined with its twin, it opens a Gate through any door.",
+		"You received a Letter (petty) detailing incontrovertible proof that your true parentage is that of Fae nobility.The note also indicates a date and location where you are to meet them, deep in the The Woods.",
+		"You owe a great debt to a member of the nobility, and carry their Signet Ring (petty), which serves as proof of their protection as well as your obligation.",
+		"You consumed a Mischievous Spirit that periodically wreaks havoc on your insides, demanding to be taken home. It wants to keep you alive, at least until it is free. It takes up one slot, but eats one Fatigue per day. It can detect magic and knows a bit about The Woods.",
+		"A roaming storyteller once spun you tales of great treasure hidden deep in The Woods. You thought it naught but fancy, till they gave you A Rolled-Up Map (petty) marked with an X.",
+		"During your travels, you met a dying hunter who asked you to deliver a message to their loved ones. Take a Letter (petty), sealed with tree sap. It is addressed only to the Lord Of Winter.",
+		"You found a wounded beast in the forest, but chose to ignore it. You see it everywhere now, but only when you’re alone. It looks sad, but not angry.",
+		"You promised a childhood friend that you’d bring them back a rare gift, something unique in all the world. Take a Bracelet (petty) woven from twine and wildflowers.",
+		"You crossed a creature of The Woods, and it cursed you with a Stone Heart (1 Armor, bulky). With each passing month, the stone grows heavier by one slot. Until your debt is lifted, you cannot truly die.",
+		"You carved a Whistle (petty) from an Oak Lord’s branch. Your act did not go unnoticed. You cannot seem to rid yourself of the whistle either.",
+		"The Dawn Brigade did your family a service, giving you a dried Blood-Red Flower (petty) as proof. When the flower turns white, it means the favor is owed.",
+		"An entertainer once visited your home, filling it with story and song. He left one day without a word, leaving behind only A Miniature Lute. Something rattles inside.",
+		"A white crow appeared to you in a dream, holding a twig in its mouth. You awoke the next morning with The Twig (petty) in your hand. You believe it brings you luck. It smells faintly of sulfur.",
+		"One of your ancestors wronged a Moss Witch, who cursed their bloodline. Your visage causes mirrors to shatter. You’ve noticed that the shards can sometimes reveal illusions.",
+	}
+
+	omensList = []string{
+		"The once rich waters of a life-giving river have turned black and putrid, tainting the land and sickening those who drink from it. A village elder points to some recent desecration as the cause, but most do not heed their words.",
+		"It feels like winter has arrived too quickly this year, frost and snows making their appearance much earlier than expected. There is talk of a pattern to the frost found in windows, ponds, and cracks in the ground. It almost looks like a map.",
+		"A thick, unnatural fog has begun encroaching upon an ancient and holy grove. It is said to be the work of a great forest spirit, angered by nearby deforestation.",
+		"The night sky grows dimmer each evening, as if stars are disappearing one by one. Rumors of hellish creatures capturing farmers and pulling them into The Roots are spreading like wildfire. Village elders believe the two are connected.",
+		"The songbirds of The Woods have fallen eerily silent as of late. Hunters claim that a spectral figure has been spotted wandering the forest, gazing longingly at anyone it encounters.",
+		"Strange, tear-shaped stones have been found throughout the region, sparking a “gold rush” of sorts for jewelers and thieves alike. The locals believe they are the tears of the earth itself, weeping for a great tragedy yet to come.",
+		"Swarming pests gnaw away at the edges of dreams, and farmers speak of a loud buzzing sound emanating from deep within The Woods. They also say that the sound is getting closer.",
+		"There is a village known far and wide for its impressive “mother tree”, said to shelter the town’s secrets in its boughs. Recently, it has begun bleeding red sap, worrying the elders.",
+		"The moon turns a deep crimson, bathing the night in an eerie, blood-red light. Some say it heralds a time of chaos and strife, as the boundaries between The Woods and the mortal realm grow thin.",
+		"Strange cracks have appeared in the night sky, revealing a swirling vortex of light and color. Some say that the divide between realms is at its weakest in centuries, and fear what may emerge from the other side.",
+		"A night-blooming flower once thought extinct is sprouting up throughout The Woods. Its scent is intoxicating, but also causes vivid nightmares.",
+		"Local livestock have grown increasingly agitated and unmanageable as of late. An old shephard says it is due to an unsettling howl that emanates from The Woods each full moon.",
+		"Swarms of insects are fleeing from The Woods in droves, destroying any wooden structures they come across. The sound of their wings hum a familiar tune as they pass overhead, like a forgotten nursery rhyme.",
+		"Hunters talk of a curse that befalls any who kill a white-frocked beast: soon after, they are found dead in their homes. Each day, there are fewer and fewer creatures to hunt.",
+		"Folks say that a faint laughter can be heard echoing out of wells all over the city. At night, they say the echoes change to sobs.",
+		"The constellations have slowly started shifting in the night sky, forming unfamiliar patterns that have stargazers and sages perplexed. Even the animals seem disturbed.",
+		"An ancient tree at the heart of a sleepy village has suddenly withered and died, despite showing no signs of disease. After its trunk was cut, a bloody hand was found in its core.",
+		"Statues have been weeping blood for months on end, and the wombs of the village have lain barren since they began to fall. A single child has been the only exception, taken by elders overcome with fear and dread.",
+		"The local fauna is behaving oddly, displaying heightened aggression, or fleeing the area entirely. Hunters talk of a shadowy figure that roams The Woods, calling to the animals.",
+		"Border towns have become riotous in recent weeks, after multiple claims of a red-robed figure appearing in their children’s dreams, uttering the same warning: A fire is coming, and it will consume them all.",
+	}
+
 	backgroundDetails = map[string]string{
 		"aurifex":        "You are an artisan of the arcane, a smith of subtle forces. In the crucible of your workshop, the laws that govern this world are warped to suit your needs.",
 		"barber-surgeon": "You walk the line between healer and harrower, knowing the frailty of the flesh but also the secrets that lay within. With the right tools, life and death are merely words.",
@@ -79,6 +125,129 @@ var (
 		"prowler":        "You are a specter in the night, a fleeting shadow that slips by its prey, unseen. Each kill a test of cunning and animal determination, a contest between life and death. You know that one day you will lose. You look forward to it.",
 		"rill runner":    "You sing the stories of rivers and lakes, your talents soothing friends and the elements alike. You’ve seen more than most, but somehow it never seems to be enough.",
 		"scrivener":      "You copy ancient texts and illuminate manuscripts, recording the voices of the clever, the great, and the powerful. You will prove that the pen truly is mightier than the sword.",
+	}
+
+	backgroundGear = map[string][]string{
+		"aurifex": {
+			"Lantern",
+			"Oil can (6 uses)",
+			"Needle-knife (d6)",
+			"Protective gloves (petty)",
+		},
+		"barber-surgeon": {
+			"Bonesaw (d6)",
+			"Bandages (3 uses)",
+			"Leech (restores 1 STR, 3 uses)",
+			"Stained medical finery (petty)",
+		},
+		"beast handler": {
+			"Leather whip (d6)",
+			"Soporific darts (STR save or fall asleep, 6 uses)",
+			"Lure",
+			"Rope (25ft)",
+		},
+		"bonekeeper": {
+			"Lantern",
+			"Oil can (6 uses)",
+			"Stake (d6)",
+			"Chains (10ft)",
+		},
+		"cutpurse": {
+			"Twin daggers (d6+d6, bulky)",
+			"Padded leather (1 Armor)",
+			"Lockpicks",
+			"Black outfit (petty)",
+		},
+		"fieldwarden": {
+			"Brigandine (1 Armor, bulky)",
+			"Bow (d6, bulky)",
+			"Hand axe (d6)",
+			"Repellent (state the creature, 3 uses)",
+		},
+		"fletchwind": {
+			"Serrated knife (d6)",
+			"Boiled leather (1 Armor)",
+			"Wooden sight (petty)",
+			"Heartroot Salve (recover 1d4 STR)",
+		},
+		"foundling": {
+			"Salt pouch",
+			"Heirloom amulet (petty, glows in the presence of magic)",
+			"Sling (d6)",
+			"Dagger (d6)",
+		},
+		"fungal forager": {
+			"Sharpened trowel (d6)",
+			"Candle helmet (+1 Armor, dim, 6 uses)",
+			"Rope (25ft)",
+			"Metal pail",
+		},
+		"greenwise": {
+			"Iron pot",
+			"Root knife (d6)",
+			"Healing salve (restore 4 STR)",
+			"Twine bauble (petty, Ward once per day) Ward: A silver circle 50ft across appears on the ground. Choose one species that cannot cross it.",
+		},
+		"half witch": {
+			"Thicket Spellbook",
+			"Iron dagger (d6)",
+			"Herbs pouch (restore 1 STR, 3 uses)",
+			"Ghillie suit",
+		},
+		"hexenbane": {
+			"Vestments of the Order (petty)",
+			"Blessed Tinctures",
+			"Silver knife (d6)",
+			"Crossbow (d8, bulky)",
+		},
+		"jongleur": {
+			"Costume",
+			"Simple Instrument (Pipes, Lute, etc.)",
+			"Lucky jerkin (1 Armor)",
+			"Sling (d6)",
+		},
+		"kettlewright": {
+			"Pincers",
+			"Roll of tin",
+			"Tent (fits 2)",
+			"Hammer (d6)",
+		},
+		"marchguard": {
+			"Lantern",
+			"Oil can (6 uses)",
+			"Long sword (d10, bulky)",
+			"Boiled leather (1 Armor)",
+		},
+		"mountebank": {
+			"Cart (+4 slots, bulky when pulled)",
+			"Trick playing cards",
+			"Fancy hat (petty)",
+			"Cane sword (d6)",
+		},
+		"outrider": {
+			"Long sword (d10, bulky)",
+			"Leather jerkin (1 Armor)",
+			"Crossbow (d8, bulky)",
+			"Spyglass",
+		},
+		"prowler": {
+			"Tarp",
+			"Boiled leather (1 Armor)",
+			"Short sword (d6)",
+			"Spring-loaded trap (4 STR damage)",
+		},
+		"rill runner": {
+			"Water shoes",
+			"Brigandine (1 Armor, bulky)",
+			"Compass",
+			"Dagger (d6)",
+		},
+		"scrivener": {
+			"Quill & Ink",
+			"Blank book",
+			"Awl (d6)",
+			"Badge (petty)",
+		},
 	}
 
 	backgroundQuestions = map[string][]string{
