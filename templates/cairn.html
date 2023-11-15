@@ -19,8 +19,6 @@
         background-color: #212121;
         margin: 0 25px 0 25px;
         font-family: "Courier New", Courier, monospace;
-        word-wrap: break-word;
-        max-width: 63ch;
       }
       p,
       pre {
@@ -28,6 +26,10 @@
         margin-bottom: 0;
         background-color: transparent;
         font-family: "Courier New", Courier, monospace;
+      }
+      .wrap {
+        max-width: 63ch;
+        word-wrap: break-word;
       }
       a:link {
         color: #ffa227;
@@ -116,14 +118,16 @@
 │ {{printf "%-60s" (index .Omens 4)}}│
 └─────────────────────────────────────────────────────────────┘</pre
     >
-    <p><b>{{.Background}}</b></p>
-    <p>{{.Details}}</p>
-    <p><b>Starting Gear</b></p>
-    <p>{{range .Gear}}{{printf "- %s<br />" .}}{{end}}</p>
-    <p><b>{{(index .Questions 0)}}</b></p>
-    <p>{{(index .Answers 0)}}</p>
-    <p><b>{{(index .Questions 1)}}</b></p>
-    <p>{{(index .Answers 1)}}</p>
+    <div class="wrap">
+      <p><b>{{.Background}}</b></p>
+      <p>{{.Details}}</p>
+      <p><b>Starting Gear</b></p>
+      <p>{{range .Gear}}{{printf "- %s<br />" .}}{{end}}</p>
+      <p><b>{{(index .Questions 0)}}</b></p>
+      <p>{{(index .Answers 0)}}</p>
+      <p><b>{{(index .Questions 1)}}</b></p>
+      <p>{{(index .Answers 1)}}</p>
+    </div>
     <footer>
       <pre
         class="no-print"
