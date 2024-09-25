@@ -281,7 +281,7 @@ func PrimeRequisite(class string, STR, INT, WIS, DEX, CON, CHA int) int {
 		return primeRequisiteSingle(STR)
 	case "halfling":
 		return primeRequisiteHalfling(DEX, STR)
-	case "magic-User":
+	case "magic-user":
 		return primeRequisiteSingle(INT)
 	case "thief":
 		return primeRequisiteSingle(DEX)
