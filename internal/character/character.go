@@ -120,7 +120,7 @@ func NewCharClass(class string) *Character {
 		SaveBreath:   saves[3],
 		SaveSpells:   saves[4],
 		HitDie:       hitDie,
-		HitPoints:    dice.Roll(hitDie),
+		HitPoints:    dice.Roll(hitDie) + calcMod(CON),
 	}
 }
 
