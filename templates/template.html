@@ -150,10 +150,17 @@
             color: inherit;
             font-family: inherit;
             font-size: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+            text-shadow: inherit;
             padding: 0;
             margin: 0;
-            width: 10ch;
             outline: none;
+            width: 22ch;
+            min-width: 0;
+            text-transform: inherit;
+            -webkit-appearance: none;
+            border-radius: 0;
         }
 
         .editable-field:focus {
@@ -246,7 +253,7 @@
     <main>
         <div class="sheet-container">
             <pre class="character-sheet">╔══════════════════════════════╦══════════════════════════════╗
-║ NAME <input type="text" class="editable-field">              ║ PLAYER <input type="text" class="editable-field">            ║
+║ NAME <input type="text" class="editable-field">  ║ PLAYER <input type="text" class="editable-field">║
 ╠══════════════════════════════╩══════╦═AC════╦═HP════╦═MX════╣
 ║ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}   ║  <input type="text" class="editable-field number">  ║  <input type="text" class="editable-field number">  ║  <input type="text" class="editable-field number">  ║
 ║ Title         {{printf "%-20s" .Title}}  ║       ║       ║       ║
