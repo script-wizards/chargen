@@ -1,182 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chargen | Script Wizards</title>
-    <link rel="icon" type="image/png" href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png" />
+    <title>OSE Character Generator | Script Wizards</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png"
+    />
     <style>
-      :root {
-        --text-color: #ece3d0;
-        --bg-color: #212121;
-        --accent-color: #ffa227;
-        --border-width: 3px;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      html, body {
-        height: 100%;
-      }
-
-      body {
-        display: flex;
-        flex-direction: column;
-        color: var(--text-color);
-        background-color: var(--bg-color);
-        font-family: "Courier New", Courier, monospace;
-        padding: 1rem;
-        font-size: 14px;
-        line-height: 1.2;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-      }
-
-      .nav a.active {
-        background-color: var(--accent-color);
-        color: var(--bg-color);
-      }
-
-      .sheet-container {
-        flex: 1;
-        display: flex;
-        align-items: start;
-        justify-content: center;
-        padding: 1rem;
-        margin-bottom: 3rem;
-      }
-
-      .character-sheet {
-        white-space: pre;
-        font-size: 1em;
-      }
-
-      .controls {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: var(--bg-color);
-        padding: 0.5rem;
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        align-items: center;
-      }
-
-      button, a {
-        color: var(--accent-color);
-        text-decoration: none;
-        background: none;
-        border: 0 solid var(--accent-color);
-        padding: 0.25rem 0.5rem;
-        min-width: 8ch;
-        text-align: center;
-        font-family: inherit;
-        font-size: 1em;
-        cursor: pointer;
-        text-transform: uppercase;
-      }
-
-      button:hover, a:hover {
-        color: var(--bg-color);
-        background-color: var(--accent-color);
-      }
-
-      .copyright {
-        font-size: 1em;
-      }
-
-      @media print {
-        @page {
-          margin: 0.5cm;
-          size: letter portrait;
+        :root {
+            --text-color: #ece3d0;
+            --bg-color: #111111;
+            --accent-color: #ffa227;
+            --link-hover: #111111;
         }
 
-        html, body {
-          margin: 0;
-          padding: 0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-          color: black;
-          background-color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-family: "Courier New", Courier, monospace;
+            line-height: 1.5;
+            text-shadow: 0 0 5px var(--text-color);
+            padding: 1rem;
         }
 
-        .nav, .controls {
-          display: none;
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            min-height: min-content;
+            padding-top: 1rem;
+            position: relative;
+        }
+
+        main::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 162, 39, 0.03),
+                rgba(255, 162, 39, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .nav, .sheet-container, .menu-toggle {
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav {
+            width: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1rem;
+            order: 2;
+        }
+
+        .nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            padding: 0.5rem;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            position: relative;
+            display: inline-block;
+            opacity: 0.9;
+            font-size: 0.8em;
+        }
+
+        .nav a:hover, .nav a.active {
+            background-color: var(--accent-color);
+            color: var(--link-hover);
+            text-shadow: none;
+            padding-left: 1.5rem;
+            opacity: 1;
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            color: var(--accent-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            font-family: inherit;
+            font-size: 1em;
+        }
+
+        .menu-toggle::before {
+            content: "≡";
+            white-space: pre;
+            display: block;
+            line-height: 1;
         }
 
         .sheet-container {
-          margin: 0;
-          padding: 0;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            overflow: hidden;
+            order: 1;
         }
 
         .character-sheet {
-          transform: scale(1.4);
-          transform-origin: top center;
+            white-space: pre;
+            font-size: 1em;
+            height: min-content;
         }
-      }
+
+        .copyright {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding-top: 3.5rem;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -200px;
+                height: 100vh;
+                background: var(--bg-color);
+                transition: right 0.3s ease;
+                z-index: 99;
+                width: 200px;
+                padding-top: 4rem;
+            }
+
+            .nav.active {
+                right: 0;
+                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+            }
+
+            .character-sheet {
+                font-size: 0.8em;
+            }
+        }
+
+        @media print {
+            @page {
+                margin: 0.5cm;
+                size: letter portrait;
+            }
+
+            body {
+                color: black;
+                background-color: white;
+                text-shadow: none;
+            }
+
+            .nav, .menu-toggle {
+                display: none;
+            }
+
+            .character-sheet {
+                transform: scale(1.4);
+                transform-origin: top center;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div class="nav">
-      <a href="/?class=cleric">CLERIC</a>
-      <a href="/?class=dwarf">DWARF</a>
-      <a href="/?class=elf">ELF</a>
-      <a href="/?class=fighter">FIGHTER</a>
-      <a href="/?class=halfling">HALFLING</a>
-      <a href="/?class=magic-user">MAGIC-USER</a>
-      <a href="/?class=thief">THIEF</a>
-    </div>
-    <div class="sheet-container">
-      <pre class="character-sheet">┌NAME──────────────────────────┬PLAYER────────────────────────┐
-│                              │                              │
-├──────────────────────────────┴──────┬AC─────┬HP─────┬MAX────┤
-│ Class                               │       │       │       │
-│ Title                               │       │       │       │
-│ Alignment                           │       │       │       │
-├ABILITY SCORES───────────────────────┴───────┴─┬─────┴───────┤
-│ STR          Melee hit/dmg, Open Doors        │             │
-│ INT          Languages, Literacy              │             │
-│ WIS          Saves vs Magic                   │             │
-│ DEX          AC, Missile Hit                  │             │
-│ CON          Hit Points                       │             │
-│ CHA            / /  React/Retainers/Morale    │             │
-├COMBAT────────────────┬SAVING THROWS───────────┼MOVEMENT─────┤
-│ Hit Points           │ Death/Poison           │ OV     mi/d │
-│ Armor Class          │ Wands                  │ EX      '/t │
-│ Melee hit/dmg        │ Paralyze/Petrify       │ EN      '/r │
-│ Missile hit          │ Breath Attacks         │ Doors    /6 │
-│ Initiative           │ Spells/Rods/Staves     │             │
-├THAC0─────────────────┴────────────┬EXPERIENCE─┴─────────────┤
-│ AC   9  8  7  6  5  4  3  2  1  0 │                       % │
-│ d20                               │                   /     │
-└───────────────────────────────────┴─────────────────────────┘</pre>
-    </div>
+</head>
+<body>
+    <button class="menu-toggle" aria-label="Toggle menu"></button>
+    <main>
+        <div class="sheet-container">
+            <pre class="character-sheet">╔══════════════════════════════╦══════════════════════════════╗
+║ NAME                         ║ PLAYER                       ║
+╠══════════════════════════════╩══════╦═AC════╦═HP════╦═MX════╣
+║ Class                               ║       ║       ║       ║
+║ Title                               ║       ║       ║       ║
+║ Alignment                           ║       ║       ║       ║
+╠ABILITY SCORES═══════════════════════╩═══════╩═╦═════╩═══════╣
+║ STR          Melee hit/dmg, Open Doors        ║             ║
+║ INT          Languages, Literacy              ║             ║
+║ WIS          Saves vs Magic                   ║             ║
+║ DEX          AC, Missile Hit                  ║             ║
+║ CON          Hit Points                       ║             ║
+║ CHA            / /  React/Retainers/Morale    ║             ║
+╠COMBAT════════════════╦SAVING THROWS═══════════╬MOVEMENT═════╣
+║ HP                   ║ Death/Poison           ║ OV          ║
+║ Armor Class          ║ Wands                  ║ EX          ║
+║ Melee hit/dmg        ║ Paralyze/Petrify       ║ EN          ║
+║ Missile hit          ║ Breath Attacks         ║ Doors    /6 ║
+║ Initiative           ║ Spells/Rods/Staves     ║             ║
+╠THAC0═════════════════╩════════════╦EXPERIENCE═╩═════════════╣
+║ AC   9  8  7  6  5  4  3  2  1  0 ║                       % ║
+║ d20                               ║                   /     ║
+╚ABILITIES══════════════════════════╩═════════════════════════╝
 
-    <div class="controls">
-      <button onclick="window.location.href='.';" accesskey="r">REROLL</button>
-      <button onclick="window.location.href='/blank';" accesskey="c">CLEAR</button>
-      <button onclick="window.print();" accesskey="p">PRINT</button>
-      <span>|</span>
-      <span class="copyright">© SCRIPT WIZARDS — <a href="https://scriptwizards.org">SCRIPTWIZARDS.ORG</a></span>
-    </div>
 
+
+
+═INVENTORY═════════════════════════════════════════════════════</pre>
+        </div>
+        <div class="nav">
+            <a href="/?class=cleric">Cleric</a>
+            <a href="/?class=dwarf">Dwarf</a>
+            <a href="/?class=elf">Elf</a>
+            <a href="/?class=fighter">Fighter</a>
+            <a href="/?class=halfling">Halfling</a>
+            <a href="/?class=magic-user">Magic-User</a>
+            <a href="/?class=thief">Thief</a>
+            <a href="." accesskey="r">Reroll</a>
+            <a href="/blank" accesskey="c">Clear</a>
+            <a href="#" onclick="window.print(); return false;" accesskey="p">Print</a>
+        </div>
+    </main>
+    <div class="copyright">© SCRIPT WIZARDS</div>
     <script>
-      // Mark active class
-      const activeClass = new URLSearchParams(window.location.search).get('class');
-      if (activeClass) {
-        document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
-      }
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.querySelector('.nav').classList.toggle('active');
+        });
+
+        const activeClass = new URLSearchParams(window.location.search).get('class');
+        if (activeClass) {
+            document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
+        }
     </script>
-  </body>
+</body>
 </html>

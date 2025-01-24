@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Script Wizards Character Generator</title>
+    <title>OSE Character Generator | Script Wizards</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png"
+    />
     <style>
         :root {
             --text-color: #ece3d0;
@@ -32,10 +37,34 @@
 
         main {
             flex: 1;
-            position: relative;
             display: flex;
-            padding-top: 1rem;
             flex-direction: row;
+            min-height: min-content;
+            padding-top: 1rem;
+            position: relative;
+        }
+
+        main::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 162, 39, 0.03),
+                rgba(255, 162, 39, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .nav, .sheet-container, .menu-toggle {
+            position: relative;
+            z-index: 2;
         }
 
         .nav {
@@ -44,7 +73,7 @@
             flex-direction: column;
             gap: 0.5rem;
             padding: 1rem;
-            order: 2; /* Move to end of flex container */
+            order: 2;
         }
 
         .nav a {
@@ -90,22 +119,26 @@
             font-size: 1em;
         }
 
+        .menu-toggle::before {
+            content: "≡";
+            white-space: pre;
+            display: block;
+            line-height: 1;
+        }
+
         .sheet-container {
             flex: 1;
             display: flex;
-            align-items: start;
             justify-content: center;
             padding: 0;
-            margin-bottom: 2.5rem;
-            width: 100%;
-            overflow-x: auto;
+            overflow: hidden;
             order: 1;
         }
 
         .character-sheet {
             white-space: pre;
             font-size: 1em;
-            max-width: 100%;
+            height: min-content;
         }
 
         .editable-field {
@@ -143,7 +176,7 @@
             font-size: 0.8rem;
             opacity: 0.6;
             text-align: center;
-            margin-top: 1rem;
+            padding: 1rem 0;
         }
 
         @media (max-width: 768px) {
@@ -206,20 +239,8 @@
     </style>
 </head>
 <body>
-    <button class="menu-toggle">☰</button>
+    <button class="menu-toggle" aria-label="Toggle menu"></button>
     <main>
-        <div class="nav">
-            <a href="/?class=cleric">Cleric</a>
-            <a href="/?class=dwarf">Dwarf</a>
-            <a href="/?class=elf">Elf</a>
-            <a href="/?class=fighter">Fighter</a>
-            <a href="/?class=halfling">Halfling</a>
-            <a href="/?class=magic-user">Magic-User</a>
-            <a href="/?class=thief">Thief</a>
-            <a href="." accesskey="r">Reroll</a>
-            <a href="/blank" accesskey="c">Clear</a>
-            <a href="#" onclick="window.print(); return false;" accesskey="p">Print</a>
-        </div>
         <div class="sheet-container">
             <pre class="character-sheet">╔══════════════════════════════╦══════════════════════════════╗
 ║ NAME <input type="text" class="editable-field">              ║ PLAYER <input type="text" class="editable-field">            ║
@@ -249,24 +270,36 @@
  Torches x6 <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span>    Iron rations x7 <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span>
  Backpack  Tinder box  Waterskin  {{.Gold}}gp
 {{.Inventory}}</pre>
-        </div>
-      </main>
-      <div class="copyright">© SCRIPT WIZARDS</div>
-    <script>
-        document.querySelectorAll('.checkbox').forEach(box => {
-            box.addEventListener('click', () => {
-                box.textContent = box.textContent === '□' ? '■' : '□';
-            });
-        });
+</div>
+<div class="nav">
+    <a href="/?class=cleric">Cleric</a>
+    <a href="/?class=dwarf">Dwarf</a>
+    <a href="/?class=elf">Elf</a>
+    <a href="/?class=fighter">Fighter</a>
+    <a href="/?class=halfling">Halfling</a>
+    <a href="/?class=magic-user">Magic-User</a>
+    <a href="/?class=thief">Thief</a>
+    <a href="." accesskey="r">Reroll</a>
+    <a href="/blank" accesskey="c">Clear</a>
+    <a href="#" onclick="window.print(); return false;" accesskey="p">Print</a>
+</div>
+</main>
+<div class="copyright">© SCRIPT WIZARDS</div>
+<script>
+document.querySelectorAll('.checkbox').forEach(box => {
+    box.addEventListener('click', () => {
+        box.textContent = box.textContent === '□' ? '■' : '□';
+    });
+});
 
-        document.querySelector('.menu-toggle').addEventListener('click', () => {
-            document.querySelector('.nav').classList.toggle('active');
-        });
+document.querySelector('.menu-toggle').addEventListener('click', () => {
+    document.querySelector('.nav').classList.toggle('active');
+});
 
-        const activeClass = new URLSearchParams(window.location.search).get('class');
-        if (activeClass) {
-            document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
-        }
-    </script>
+const activeClass = new URLSearchParams(window.location.search).get('class');
+if (activeClass) {
+    document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
+}
+</script>
 </body>
 </html>
