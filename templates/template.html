@@ -1,256 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OSE Character Generator | Script Wizards</title>
-    <link rel="icon" type="image/png" href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png"
+    />
     <style>
-        :root {
-            --text-color: #ece3d0;
-            --bg-color: #111111;
-            --accent-color: #ffa227;
-            --link-hover: #111111;
-        }
+      :root {
+        --text-color: #ece3d0;
+        --bg-color: #111111;
+        --accent-color: #ffa227;
+        --link-hover: #111111;
+        --font-mono: "Courier New", Courier, monospace;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 2rem;
+        --nav-width: 200px;
+        --sheet-max-width: 1000px;
+        --transition-speed: 0.3s;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            font-family: "Courier New", Courier, monospace;
-            line-height: 1.5;
-            text-shadow: 0 0 5px var(--text-color);
-            padding: 1rem;
-        }
+      body {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        font-family: var(--font-mono);
+        line-height: 1.5;
+        text-shadow: 0 0 5px var(--text-color);
+        padding: var(--spacing-md);
+      }
 
+      .scanlines {
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(255, 162, 39, 0.03),
+          rgba(255, 162, 39, 0.03) 1px,
+          transparent 1px,
+          transparent 2px
+        );
+        pointer-events: none;
+        z-index: 1;
+        contain: content;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 1fr var(--nav-width);
+        gap: var(--spacing-lg);
+        max-width: var(--sheet-max-width);
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      .sheet-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--accent-color) var(--bg-color);
+      }
+
+      .character-sheet {
+        white-space: pre;
+        font-size: clamp(0.75em, 2vw, 1em);
+        height: min-content;
+        min-width: min-content;
+      }
+
+      .nav {
+        position: sticky;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md);
+      }
+
+      .nav-link {
+        color: var(--accent-color);
+        text-decoration: none;
+        padding: var(--spacing-sm);
+        text-transform: uppercase;
+        transition: all var(--transition-speed) ease;
+        position: relative;
+        opacity: 0.9;
+        font-size: 0.8em;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background-color: var(--accent-color);
+        color: var(--link-hover);
+        text-shadow: none;
+        padding-left: 1.5rem;
+        opacity: 1;
+      }
+
+      .nav-link:hover::before,
+      .nav-link.active::before {
+        content: ">";
+        position: absolute;
+        left: var(--spacing-sm);
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--link-hover);
+      }
+
+      .menu-toggle {
+        display: none;
+        position: fixed;
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+        color: var(--accent-color);
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 100;
+        font-family: inherit;
+        font-size: 1em;
+        padding: var(--spacing-sm);
+      }
+
+      .menu-toggle::before {
+        content: "┌─┐\A│≡│\A└─┘";
+        white-space: pre;
+        display: block;
+        line-height: 1;
+      }
+
+      [contenteditable="true"] {
+        display: inline-block;
+        background: none;
+        border: none;
+        color: inherit;
+        font: inherit;
+        text-shadow: inherit;
+        outline: none;
+        min-width: 54ch;
+        max-width: 54ch;
+        white-space: pre;
+        vertical-align: top;
+      }
+
+      [contenteditable="true"]:focus {
+        color: var(--accent-color);
+        text-shadow: 0 0 5px var(--accent-color);
+      }
+
+      [contenteditable="true"].number {
+        min-width: 3ch;
+        max-width: 3ch;
+        text-align: center;
+      }
+
+      .checkbox {
+        cursor: pointer;
+        user-select: none;
+        transition: color var(--transition-speed) ease;
+      }
+
+      .checkbox:hover {
+        color: var(--accent-color);
+      }
+
+      .copyright {
+        font-size: 0.8rem;
+        opacity: 0.6;
+        text-align: center;
+        padding: var(--spacing-md) 0;
+      }
+
+      .copyright-link {
+        color: var(--accent-color);
+        text-decoration: none;
+        transition: opacity var(--transition-speed) ease;
+      }
+
+      .copyright-link:hover {
+        opacity: 0.8;
+      }
+
+      @media (max-width: 768px) {
         main {
-            flex: 1;
-            display: flex;
-            flex-direction: row;
-            min-height: min-content;
-            padding-top: 1rem;
-            position: relative;
-            max-width: 1000px;
-            margin: 0 auto;
-            gap: 2rem;
-        }
-
-        main::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(255, 162, 39, 0.03),
-                rgba(255, 162, 39, 0.03) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .nav, .sheet-container, .menu-toggle {
-            position: relative;
-            z-index: 2;
-        }
-
-        .nav {
-            width: 150px;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            padding: 1rem;
-            order: 2;
-        }
-
-        .nav a {
-            color: var(--accent-color);
-            text-decoration: none;
-            padding: 0.5rem;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-            position: relative;
-            display: inline-block;
-            opacity: 0.9;
-            font-size: 0.8em;
-        }
-
-        .nav a:hover, .nav a.active {
-            background-color: var(--accent-color);
-            color: var(--link-hover);
-            text-shadow: none;
-            padding-left: 1.5rem;
-            opacity: 1;
-        }
-
-        .nav a:hover::before, .nav a.active::before {
-            content: ">";
-            position: absolute;
-            left: 0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--link-hover);
+          grid-template-columns: 1fr;
+          padding-top: 3.5rem;
         }
 
         .menu-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            color: var(--accent-color);
-            background: none;
-            border: none;
-            cursor: pointer;
-            z-index: 100;
-            font-family: inherit;
-            font-size: 1em;
+          display: block;
         }
 
-        .menu-toggle::before {
-            content: "╔═╗\A║≡║\A╚═╝";
-            white-space: pre;
-            display: block;
-            line-height: 1;
+        .nav {
+          position: fixed;
+          top: 0;
+          right: calc(-1 * var(--nav-width));
+          height: 100vh;
+          background: var(--bg-color);
+          transition: right var(--transition-speed) ease;
+          z-index: 99;
+          padding-top: 4rem;
+          width: var(--nav-width);
+        }
+
+        .nav.active {
+          right: 0;
+          box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
         }
 
         .sheet-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            padding: 0;
-            overflow: hidden;
-            order: 1;
+          order: 2;
+        }
+      }
+
+      @media print {
+        @page {
+          size: letter;
+          margin: 0.5cm;
+        }
+
+        body {
+          color: black;
+          background-color: white;
+          text-shadow: none;
+          padding: 0;
+          min-height: 0;
+          display: block;
+          align-items: unset;
+          justify-content: unset;
+          height: auto;
+        }
+
+        main {
+          padding: 0;
+          max-width: none;
+          width: 100%;
+          display: block;
+        }
+
+        .nav,
+        .menu-toggle,
+        .scanlines,
+        .copyright {
+          display: none;
+        }
+
+        .sheet-container {
+          width: 100%;
+          display: block;
+          overflow: visible;
+          transform: none;
         }
 
         .character-sheet {
-            white-space: pre;
-            font-size: 1em;
-            height: min-content;
+          font-size: 1em;
+          width: fit-content;
+          height: auto;
+          white-space: pre;
         }
 
         [contenteditable="true"] {
-            display: inline-block;
-            background: none;
-            border: none;
-            color: inherit;
-            font: inherit;
-            text-shadow: inherit;
-            padding: 0;
-            margin: 0;
-            outline: none;
-            min-width: 54ch;
-            max-width: 54ch;
-            white-space: pre;
-            vertical-align: top;
+          color: black;
+          text-shadow: none;
         }
-
-        [contenteditable="true"]:focus {
-            color: var(--accent-color);
-            text-shadow: 0 0 5px var(--accent-color);
-        }
-
-        [contenteditable="true"].number {
-            min-width: 3ch;
-            max-width: 3ch;
-            text-align: center;
-        }
-
-        .checkbox {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .checkbox:hover {
-            color: var(--accent-color);
-        }
-
-        .copyright {
-            font-size: 0.8rem;
-            opacity: 0.6;
-            text-align: center;
-            padding: 1rem 0;
-        }
-
-        @media (max-width: 768px) {
-            main {
-                padding-top: 3.5rem;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .nav {
-                position: fixed;
-                top: 0;
-                right: -200px;
-                height: 100vh;
-                background: var(--bg-color);
-                transition: right 0.3s ease;
-                z-index: 99;
-                width: 200px;
-                padding-top: 4rem;
-            }
-
-            .nav.active {
-                right: 0;
-                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-            }
-
-            .character-sheet {
-                font-size: 0.8em;
-            }
-        }
-
-        @media print {
-            @page {
-                margin: 0.5cm;
-                size: letter portrait;
-            }
-
-            body {
-                color: black;
-                background-color: white;
-                text-shadow: none;
-            }
-
-            .nav, .menu-toggle {
-                display: none;
-            }
-
-            .character-sheet {
-                transform: scale(1.4);
-                transform-origin: top center;
-            }
-
-            [contenteditable="true"] {
-                color: black;
-                text-shadow: none;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <button class="menu-toggle" aria-label="Toggle menu"></button>
+  </head>
+  <body>
+    <div class="scanlines" aria-hidden="true"></div>
+    <button class="menu-toggle" aria-label="Toggle navigation menu"></button>
+
     <main>
-        <div class="sheet-container">
-            <pre class="character-sheet">╔═════════════════════════════════════════════════════════════╗
-║ NAME <div contenteditable="true" class="editable-field"></div> ║
+      <div class="sheet-container">
+        <pre
+          class="character-sheet"
+          aria-label="Character sheet"
+        >╔═════════════════════════════════════════════════════════════╗
+║ NAME <div contenteditable="true" class="editable-field" aria-label="Character name"></div> ║
 ╠═════════════════════════════════════╦═AC════╦═HP════╦═MX════╣
 ║ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}   ║       ║       ║       ║
-║ Title         {{printf "%-20s" .Title}}  ║  <div contenteditable="true" class="editable-field number"> </div>  ║  <div contenteditable="true" class="editable-field number"> </div>  ║  <div contenteditable="true" class="editable-field number"> </div>  ║
+║ Title         {{printf "%-20s" .Title}}  ║  <div contenteditable="true" class="editable-field number" aria-label="Armor class"> </div>  ║  <div contenteditable="true" class="editable-field number" aria-label="Hit points"> </div>  ║  <div contenteditable="true" class="editable-field number" aria-label="Experience"> </div>  ║
 ║ Alignment     {{printf "%-7s" .Alignment}}               ║       ║       ║       ║
 ╠ABILITY SCORES═══════════════════════╩═══════╩═╦═════╩═══════╣
 ║ STR  {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}  Melee hit/dmg, Open Doors        ║             ║
@@ -271,73 +312,122 @@
 ╚ABILITIES══════════════════════════╩═════════════════════════╝
 {{.Abilities}}
 ═INVENTORY═════════════════════════════════════════════════════
- Torches x6 <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span>    Iron rations x7 <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span>
+ Torches x6 <span class="checkbox" role="checkbox" tabindex="0" aria-label="Torch">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Torch">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Torch">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Torch">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Torch">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Torch">□</span>    Iron rations x7 <span class="checkbox" role="checkbox" tabindex="0" aria-label="Iron ration">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Iron ration">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Iron ration">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Iron ration">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Iron ration">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Iron ration">□</span> <span class="checkbox" role="checkbox" tabindex="0" aria-label="Iron ration">□</span>
  Backpack  Tinder box  Waterskin  {{.Gold}}gp
 {{.Inventory}}</pre>
-        </div>
-        <div class="nav">
-            <a href="/?class=cleric">Cleric</a>
-            <a href="/?class=dwarf">Dwarf</a>
-            <a href="/?class=elf">Elf</a>
-            <a href="/?class=fighter">Fighter</a>
-            <a href="/?class=halfling">Halfling</a>
-            <a href="/?class=magic-user">Magic-User</a>
-            <a href="/?class=thief">Thief</a>
-            <a href="." accesskey="r">Reroll</a>
-            <a href="/blank" accesskey="c">Clear</a>
-            <a href="#" onclick="window.print(); return false;" accesskey="p">Print</a>
-        </div>
+      </div>
+
+      <nav class="nav" aria-label="Character classes">
+        <a href="/?class=cleric" class="nav-link">Cleric</a>
+        <a href="/?class=dwarf" class="nav-link">Dwarf</a>
+        <a href="/?class=elf" class="nav-link">Elf</a>
+        <a href="/?class=fighter" class="nav-link">Fighter</a>
+        <a href="/?class=halfling" class="nav-link">Halfling</a>
+        <a href="/?class=magic-user" class="nav-link">Magic-User</a>
+        <a href="/?class=thief" class="nav-link">Thief</a>
+        <a href="." class="nav-link" accesskey="r">Reroll</a>
+        <a href="/blank" class="nav-link" accesskey="c">Clear</a>
+        <a
+          href="#"
+          onclick="window.print(); return false;"
+          class="nav-link"
+          accesskey="p"
+          >Print</a
+        >
+      </nav>
     </main>
-    <div class="copyright">© SCRIPT WIZARDS</div>
+
+    <footer class="copyright">
+      © Script Wizards
+      <a href="https://www.scriptwizards.org" class="copyright-link"
+        >scriptwizards.org</a
+      >
+    </footer>
+
     <script>
-        document.querySelectorAll('.checkbox').forEach(box => {
-            box.addEventListener('click', () => {
-                box.textContent = box.textContent === '□' ? '■' : '□';
-            });
-        });
+      // Checkbox functionality with keyboard support
+      function toggleCheckbox(box) {
+        box.textContent = box.textContent === "□" ? "■" : "□";
+        box.setAttribute("aria-checked", box.textContent === "■");
+      }
 
-        document.querySelector('.menu-toggle').addEventListener('click', () => {
-            document.querySelector('.nav').classList.toggle('active');
-        });
-
-        const activeClass = new URLSearchParams(window.location.search).get('class');
-        if (activeClass) {
-            document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
-        }
-
-        document.querySelectorAll('[contenteditable]').forEach(element => {
-          element.addEventListener('input', e => {
-              const text = e.target.textContent;
-              const limit = element.classList.contains('number') ? 3 : 54;
-
-              if (text.length > limit) {
-                  e.preventDefault();
-                  e.target.textContent = text.slice(0, limit);
-                  const range = document.createRange();
-                  const sel = window.getSelection();
-                  range.selectNodeContents(e.target);
-                  range.collapse(false);
-                  sel.removeAllRanges();
-                  sel.addRange(range);
-              }
-          });
-
-          element.addEventListener('paste', e => {
-              e.preventDefault();
-              const limit = element.classList.contains('number') ? 3 : 54;
-              const text = e.clipboardData.getData('text/plain').slice(0, limit);
-              document.execCommand('insertText', false, text);
-          });
-        });
-
-      document.querySelectorAll('[contenteditable].number').forEach(element => {
-        element.addEventListener('input', e => {
-            const text = e.target.textContent;
-            if (text.length > 3) {
-                e.target.textContent = text.slice(0, 3);
-            }
+      document.querySelectorAll(".checkbox").forEach((box) => {
+        box.addEventListener("click", () => toggleCheckbox(box));
+        box.addEventListener("keypress", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleCheckbox(box);
+          }
         });
       });
+
+      // Mobile menu functionality
+      const menuToggle = document.querySelector(".menu-toggle");
+      const nav = document.querySelector(".nav");
+
+      menuToggle.addEventListener("click", () => {
+        nav.classList.toggle("active");
+        menuToggle.setAttribute(
+          "aria-expanded",
+          nav.classList.contains("active")
+        );
+      });
+
+      // Editable fields functionality
+      document.querySelectorAll("[contenteditable]").forEach((element) => {
+        element.addEventListener("input", (e) => {
+          const text = e.target.textContent;
+          const limit = element.classList.contains("number") ? 3 : 54;
+
+          if (text.length > limit) {
+            e.preventDefault();
+            e.target.textContent = text.slice(0, limit);
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.selectNodeContents(e.target);
+            range.collapse(false);
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+        });
+
+        element.addEventListener("paste", (e) => {
+          e.preventDefault();
+          const limit = element.classList.contains("number") ? 3 : 54;
+          const text = e.clipboardData.getData("text/plain").slice(0, limit);
+          document.execCommand("insertText", false, text);
+        });
+      });
+
+      // Active class for current character class
+      const activeClass = new URLSearchParams(window.location.search).get(
+        "class"
+      );
+      if (activeClass) {
+        document
+          .querySelector(`a[href*="${activeClass}"]`)
+          ?.classList.add("active");
+      }
+
+      // Close menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (
+          nav.classList.contains("active") &&
+          !nav.contains(e.target) &&
+          !menuToggle.contains(e.target)
+        ) {
+          nav.classList.remove("active");
+          menuToggle.setAttribute("aria-expanded", false);
+        }
+      });
+
+      // Escape key closes menu
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && nav.classList.contains("active")) {
+          nav.classList.remove("active");
+          menuToggle.setAttribute("aria-expanded", false);
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
