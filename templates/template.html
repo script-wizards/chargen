@@ -1,177 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chargen | Script Wizards</title>
-    <link rel="icon" type="image/png" href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png" />
+    <title>Script Wizards Character Generator</title>
     <style>
-      :root {
-        --text-color: #ece3d0;
-        --bg-color: #212121;
-        --accent-color: #ffa227;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      html, body {
-        height: 100%;
-      }
-
-      body {
-        display: flex;
-        flex-direction: column;
-        color: var(--text-color);
-        background-color: var(--bg-color);
-        font-family: "Courier New", Courier, monospace;
-        padding: 1rem;
-        font-size: 14px;
-        line-height: 1.2;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-      }
-
-      .nav a.active {
-        background-color: var(--accent-color);
-        color: var(--bg-color);
-      }
-
-      .sheet-container {
-        flex: 1;
-        display: flex;
-        align-items: start;
-        justify-content: center;
-        padding: 1rem;
-        margin-bottom: 3rem;
-      }
-
-      .character-sheet {
-        white-space: pre;
-        font-size: 1em;
-      }
-
-      .checkbox {
-        cursor: pointer;
-        user-select: none;
-      }
-
-      .checkbox:hover {
-        color: var(--accent-color);
-      }
-
-      .controls {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: var(--bg-color);
-        padding: 0.5rem;
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .editable-field {
-        background: none;
-        border: none;
-        color: inherit;
-        font-family: inherit;
-        font-size: inherit;
-        padding: 0;
-        margin: 0;
-        width: 10ch;
-        outline: none;
-      }
-
-      .editable-field:focus {
-        color: var(--accent-color);
-      }
-
-      .editable-field.number {
-        width: 3ch;
-        text-align: center;
-      }
-
-      button, a {
-        color: var(--accent-color);
-        text-decoration: none;
-        background: none;
-        border: 0 solid var(--accent-color);
-        padding: 0.25rem 0.5rem;
-        min-width: 8ch;
-        text-align: center;
-        font-family: inherit;
-        font-size: 1em;
-        cursor: pointer;
-        text-transform: uppercase;
-      }
-
-      button:hover, a:hover {
-        color: var(--bg-color);
-        background-color: var(--accent-color);
-      }
-
-      .copyright {
-        font-size: 1em;
-      }
-
-      @media print {
-        @page {
-          margin: 0.5cm;
-          size: letter portrait;
+        :root {
+            --text-color: #ece3d0;
+            --bg-color: #111111;
+            --accent-color: #ffa227;
+            --link-hover: #111111;
         }
 
-        html, body {
-          margin: 0;
-          padding: 0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-          color: black;
-          background-color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-family: "Courier New", Courier, monospace;
+            line-height: 1.5;
+            text-shadow: 0 0 5px var(--text-color);
+            padding: 1rem;
         }
 
-        .nav, .controls {
-          display: none;
+        main {
+            flex: 1;
+            position: relative;
+            display: flex;
+            padding-top: 1rem;
+            flex-direction: row;
+        }
+
+        .nav {
+            width: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1rem;
+            order: 2; /* Move to end of flex container */
+        }
+
+        .nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            padding: 0.5rem;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            position: relative;
+            display: inline-block;
+            opacity: 0.9;
+            font-size: 0.8em;
+        }
+
+        .nav a:hover, .nav a.active {
+            background-color: var(--accent-color);
+            color: var(--link-hover);
+            text-shadow: none;
+            padding-left: 1.5rem;
+            opacity: 1;
+        }
+
+        .nav a:hover::before, .nav a.active::before {
+            content: ">";
+            position: absolute;
+            left: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--link-hover);
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            color: var(--accent-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            font-family: inherit;
+            font-size: 1em;
         }
 
         .sheet-container {
-          margin: 0;
-          padding: 0;
+            flex: 1;
+            display: flex;
+            align-items: start;
+            justify-content: center;
+            padding: 0;
+            margin-bottom: 2.5rem;
+            width: 100%;
+            overflow-x: auto;
+            order: 1;
         }
 
         .character-sheet {
-          transform: scale(1.4);
-          transform-origin: top center;
+            white-space: pre;
+            font-size: 1em;
+            max-width: 100%;
         }
 
         .editable-field {
-          color: black;
+            background: none;
+            border: none;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 0;
+            margin: 0;
+            width: 10ch;
+            outline: none;
         }
-      }
+
+        .editable-field:focus {
+            color: var(--accent-color);
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
+        .editable-field.number {
+            width: 3ch;
+            text-align: center;
+        }
+
+        .checkbox {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox:hover {
+            color: var(--accent-color);
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding-top: 3.5rem;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -200px;
+                height: 100vh;
+                background: var(--bg-color);
+                transition: right 0.3s ease;
+                z-index: 99;
+                width: 200px;
+                padding-top: 4rem;
+            }
+
+            .nav.active {
+                right: 0;
+                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+            }
+
+            .character-sheet {
+                font-size: 0.8em;
+            }
+        }
+
+        @media print {
+            @page {
+                margin: 0.5cm;
+                size: letter portrait;
+            }
+
+            body {
+                color: black;
+                background-color: white;
+                text-shadow: none;
+            }
+
+            .nav, .menu-toggle {
+                display: none;
+            }
+
+            .character-sheet {
+                transform: scale(1.4);
+                transform-origin: top center;
+            }
+
+            .editable-field {
+                color: black;
+                text-shadow: none;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div class="nav">
-      <a href="/?class=cleric">CLERIC</a>
-      <a href="/?class=dwarf">DWARF</a>
-      <a href="/?class=elf">ELF</a>
-      <a href="/?class=fighter">FIGHTER</a>
-      <a href="/?class=halfling">HALFLING</a>
-      <a href="/?class=magic-user">MAGIC-USER</a>
-      <a href="/?class=thief">THIEF</a>
-    </div>
-    <div class="sheet-container">
-      <pre class="character-sheet">╔══════════════════════════════╦══════════════════════════════╗
+</head>
+<body>
+    <button class="menu-toggle">☰</button>
+    <main>
+        <div class="nav">
+            <a href="/?class=cleric">Cleric</a>
+            <a href="/?class=dwarf">Dwarf</a>
+            <a href="/?class=elf">Elf</a>
+            <a href="/?class=fighter">Fighter</a>
+            <a href="/?class=halfling">Halfling</a>
+            <a href="/?class=magic-user">Magic-User</a>
+            <a href="/?class=thief">Thief</a>
+            <a href="." accesskey="r">Reroll</a>
+            <a href="/blank" accesskey="c">Clear</a>
+            <a href="#" onclick="window.print(); return false;" accesskey="p">Print</a>
+        </div>
+        <div class="sheet-container">
+            <pre class="character-sheet">╔══════════════════════════════╦══════════════════════════════╗
 ║ NAME <input type="text" class="editable-field">              ║ PLAYER <input type="text" class="editable-field">            ║
 ╠══════════════════════════════╩══════╦═AC════╦═HP════╦═MX════╣
 ║ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}   ║  <input type="text" class="editable-field number">  ║  <input type="text" class="editable-field number">  ║  <input type="text" class="editable-field number">  ║
@@ -199,29 +249,24 @@
  Torches x6 <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span>    Iron rations x7 <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span>
  Backpack  Tinder box  Waterskin  {{.Gold}}gp
 {{.Inventory}}</pre>
-    </div>
-
-    <div class="controls">
-      <button onclick="window.location.href='.';" accesskey="r">REROLL</button>
-      <button onclick="window.location.href='/blank';" accesskey="c">CLEAR</button>
-      <button onclick="window.print();" accesskey="p">PRINT</button>
-      <span>|</span>
-      <span class="copyright">© SCRIPT WIZARDS — <a href="https://scriptwizards.org">SCRIPTWIZARDS.ORG</a></span>
-    </div>
-
+        </div>
+      </main>
+      <div class="copyright">© SCRIPT WIZARDS</div>
     <script>
-      // Handle checkbox toggles
-      document.querySelectorAll('.checkbox').forEach(box => {
-        box.addEventListener('click', () => {
-          box.textContent = box.textContent === '□' ? '■' : '□';
+        document.querySelectorAll('.checkbox').forEach(box => {
+            box.addEventListener('click', () => {
+                box.textContent = box.textContent === '□' ? '■' : '□';
+            });
         });
-      });
 
-      // Mark active class
-      const activeClass = new URLSearchParams(window.location.search).get('class');
-      if (activeClass) {
-        document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
-      }
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.querySelector('.nav').classList.toggle('active');
+        });
+
+        const activeClass = new URLSearchParams(window.location.search).get('class');
+        if (activeClass) {
+            document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
+        }
     </script>
-  </body>
+</body>
 </html>
