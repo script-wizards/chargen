@@ -1,86 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chargen | Script Wizards</title>
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png"
-    />
+    <link rel="icon" type="image/png" href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png" />
     <style>
-      html {
-        display: table;
-        margin: auto;
+      :root {
+        --text-color: #ece3d0;
+        --bg-color: #212121;
+        --accent-color: #ffa227;
       }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html, body {
+        height: 100%;
+      }
+
       body {
-        display: table-cell;
-        color: #ece3d0;
-        background-color: #212121;
-        margin: 0 25px 0 25px;
+        display: flex;
+        flex-direction: column;
+        color: var(--text-color);
+        background-color: var(--bg-color);
         font-family: "Courier New", Courier, monospace;
+        padding: 1rem;
+        font-size: 14px;
+        line-height: 1.2;
       }
-      p,
-      pre {
-        margin-top: 0;
-        margin-bottom: 0;
-        background-color: transparent;
-        font-family: "Courier New", Courier, monospace;
+
+      .sheet-container {
+        flex: 1;
+        display: flex;
+        align-items: start;
+        justify-content: center;
+        padding-top: 1rem;
+        margin-bottom: 3rem;
       }
-      a:link {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: none;
+
+      .character-sheet {
+        white-space: pre;
+        font-size: 1em;
       }
-      a:visited {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: none;
-      }
-      a:hover {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: underline;
-      }
-      a:active {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: underline;
-      }
-      .print-only {
-        display: none;
-      }
-      @media print {
-        body {
-          color: #000000;
-          background-color: #ffffff;
-        }
-        a,
-        footer {
-          color: #000000 !important;
-        }
-        .no-print {
-          display: none;
-        }
-        .print-only {
-          display: inline;
-        }
-      }
-      footer {
+
+      .controls {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        text-align: center;
-        color: #ece3d0;
-        background-color: #212121;
-        padding: 5px;
+        background-color: var(--bg-color);
+        padding: 0.5rem;
+        border-top: 1px solid var(--accent-color);
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      button, a {
+        color: var(--accent-color);
+        text-decoration: none;
+        background: none;
+        border: 1px solid var(--accent-color);
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        font-family: inherit;
+        font-size: 0.9em;
+        cursor: pointer;
+      }
+
+      button:hover, a:hover {
+        background-color: var(--accent-color);
+        color: var(--bg-color);
+      }
+
+      .copyright {
+        font-size: 0.8em;
+        opacity: 0.8;
+      }
+
+      @media print {
+        @page {
+          margin: 0.5cm;
+          size: letter portrait;
+        }
+
+        html, body {
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          color: black;
+          background-color: white;
+        }
+
+        .sheet-container {
+          margin: 0;
+          padding: 0;
+        }
+
+        .character-sheet {
+          transform: scale(1.4);
+          transform-origin: top center;
+        }
+
+        .controls {
+          display: none;
+        }
       }
     </style>
   </head>
   <body>
-    <pre>
-┌NAME──────────────────────────┬PLAYER────────────────────────┐
+    <div class="sheet-container">
+      <pre class="character-sheet">┌NAME──────────────────────────┬PLAYER────────────────────────┐
 │                              │                              │
 ├──────────────────────────────┴──────┬AC─────┬HP─────┬MAX────┤
 │ Class         Level 10 Magic-User   │       │       │       │
@@ -145,14 +183,25 @@ Thief
  Read Languages (4+): Non-magical text, 80%, retry next level
  Scroll Use (10+): Can cast arcane spells with 90% success
  CS  TR  HN  HS  MS  OL  PP
- 87  10   2  10  20  15  20
-    </pre>
-    <footer>
-      <pre
-        class="no-print"
-      ><a href="." >Reroll</a><span> — </span><a href="/blank">Clear</a> - <a href="javascript:if(window.print)window.print()">PRINT</a></pre>
-      Copyright © 2024 Script Wizards —
-      <a href="https://scriptwizards.org">scriptwizards.org</a>
-    </footer>
-  </body>
+ 87  10   2  10  20  15  20</pre>
+</div>
+
+<div class="controls">
+  <button onclick="window.location.href='.'">REROLL</button>
+  <button onclick="window.location.href='/blank'">CLEAR</button>
+  <button onclick="window.print()">PRINT</button>
+  <span>|</span>
+  <div class="classes">
+    <a href="/?class=cleric">Cleric</a>
+    <a href="/?class=dwarf">Dwarf</a>
+    <a href="/?class=elf">Elf</a>
+    <a href="/?class=fighter">Fighter</a>
+    <a href="/?class=halfling">Halfling</a>
+    <a href="/?class=magic-user">Magic-User</a>
+    <a href="/?class=thief">Thief</a>
+  </div>
+  <span>|</span>
+  <span class="copyright">© Script Wizards — <a href="https://scriptwizards.org">scriptwizards.org</a></span>
+</div>
+</body>
 </html>

@@ -1,110 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>chargen | Script Wizards</title>
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cairn | Script Wizards</title>
+    <link rel="icon" type="image/png" href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png" />
     <style>
-      html {
-        display: table;
-        margin: auto;
+      :root {
+        --text-color: #ece3d0;
+        --bg-color: #212121;
+        --accent-color: #ffa227;
       }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html, body {
+        height: 100%;
+      }
+
       body {
-        display: table-cell;
-        color: #ece3d0;
-        background-color: #212121;
-        margin: 0 25px 0 25px;
+        display: flex;
+        flex-direction: column;
+        color: var(--text-color);
+        background-color: var(--bg-color);
         font-family: "Courier New", Courier, monospace;
-        width: 100vw;
+        padding: 1rem;
+        font-size: 14px;
+        line-height: 1.2;
       }
-      p,
-      pre {
-        margin-top: 0;
-        margin-bottom: 0;
-        background-color: transparent;
-        font-family: "Courier New", Courier, monospace;
+
+      .sheet-container {
+        flex: 1;
+        display: flex;
+        align-items: start;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 3rem;
       }
-      a:link {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: none;
+
+      .character-sheet {
+        white-space: pre;
+        font-size: 1em;
+        margin-bottom: 1rem;
       }
-      a:visited {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: none;
+
+      .details {
+        max-width: 40em;
+        word-wrap: break-word;
+        margin-left: 25px;
+        font-size: 12px;
       }
-      a:hover {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: underline;
-      }
-      a:active {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: underline;
-      }
-      .print-only {
-        display: none;
-      }
-      @media print {
-        body {
-          color: #000000;
-          background-color: #ffffff;
-        }
-        a,
-        footer {
-          color: #000000 !important;
-        }
-        .no-print {
-          display: none;
-        }
-        .print-only {
-          display: inline;
-        }
-      }
-      footer {
+
+      .controls {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
+        background-color: var(--bg-color);
+        padding: 0.5rem;
+        border-top: 1px solid var(--accent-color);
         text-align: center;
-        color: #ece3d0;
-        background-color: #212121;
-        padding: 5px;
       }
-      .container {
-        width: 80%;
-        margin: auto;
-        word-wrap: break-word;
+
+      a {
+        color: var(--accent-color);
+        text-decoration: none;
+      }
+
+      .controls a {
+        border: 1px solid var(--accent-color);
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        display: inline-block;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .controls a:hover {
+        background-color: var(--accent-color);
+        color: var(--bg-color);
+        text-decoration: none;
+      }
+
+      @media print {
+        @page {
+          margin: 0.5cm;
+          size: letter portrait;
+        }
+
+        body {
+          color: black;
+          background-color: white;
+          padding: 0;
+        }
+
+        .sheet-container {
+          margin: 0;
+        }
+
+        .character-sheet {
+          transform: scale(1.2);
+          transform-origin: top center;
+        }
+
+        .controls {
+          display: none;
+        }
+
+        .no-print {
+          display: none;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <br /><br />
-      <div style="text-align: left">
-        <pre>
-merlin@scriptwizards.org:~$ cat 404.txt
-___   ___  ________  ___   ___
-|\  \ |\  \|\   __  \|\  \ |\  \
-\ \  \\_\  \ \  \|\  \ \  \\_\  \
- \ \______  \ \  \\\  \ \______  \
-  \|_____|\  \ \  \\\  \|_____|\  \
-         \ \__\ \_______\     \ \__\
-          \|__|\|_______|      \|__|
-        </pre>
-        <span>{{.Msg}}</span>
-        <br /><br /><a href="https://chargen.scriptwizards.org">Return</a>
+    <div class="sheet-container">
+      <pre class="character-sheet">┌NAME──────────────────────────────────┬────────────────────┐
+│ {{printf "%-10s" .Name}}                           │                    │
+├BACKGROUND────────────────────────────┤                    │
+│ {{printf "%-14s" .Background}}                       │                    │
+├ABILITIES┬─────────┬─────────┬────────┤                    │
+│         │         │         │        │                    │
+│         │         │         │        │                    │
+│         │         │         │        │                    │
+│      {{printf "%2d" .STR}} │      {{printf "%2d" .DEX}} │      {{printf "%2d" .WIL}} │ HP: {{printf "%2d" .HP}} │                    │
+├─────────┴┬───┬────┴──┬───┬──┴───┬────┤                    │
+│ DEPRIVED │   │ ARMOR │   │ GOLD │ {{printf "%2d" .Gold}} │                    │
+└──────────┴───┴───────┴───┴──────┴────┴────────────────────┘
+┌TRAITS────────────────┬─────────────────────────┬──────────┐
+│ Physique: {{printf "%-10s" (index .Traits 0)}} │ Speech: {{printf "%-15s" (index .Traits 4)}} │ Age: {{printf "%2d" .Age}}  │
+│ Skin: {{printf "%-14s" (index .Traits 1)}} │ Clothing: {{printf "%-13s" (index .Traits 5)}} ├──────────┤
+│ Hair: {{printf "%-14s" (index .Traits 2)}} │ Virtue: {{printf "%-15s" (index .Traits 6)}} │          │
+│ Face: {{printf "%-14s" (index .Traits 3)}} │ Vice: {{printf "%-17s" (index .Traits 7)}} │          │
+├BONDS─────────────────┴─────────────────────────┴──────────┤
+│ {{printf "%-58s" (index .Bonds 0)}}│
+│ {{printf "%-58s" (index .Bonds 1)}}│
+│ {{printf "%-58s" (index .Bonds 2)}}│
+│ {{printf "%-58s" (index .Bonds 3)}}│
+│ {{printf "%-58s" (index .Bonds 4)}}│
+├OMENS──────────────────────────────────────────────────────┤
+│ {{printf "%-58s" (index .Omens 0)}}│
+│ {{printf "%-58s" (index .Omens 1)}}│
+│ {{printf "%-58s" (index .Omens 2)}}│
+│ {{printf "%-58s" (index .Omens 3)}}│
+│ {{printf "%-58s" (index .Omens 4)}}│
+└───────────────────────────────────────────────────────────┘</pre>
+      <div class="details">
+        {{.Details}}<br />
+        <b>Starting Gear: </b>
+        {{.Gear}}<br />
+        <b>{{(index .Questions 0)}}</b> {{index .Answers 0}}<br />
+        <b>{{(index .Questions 1)}}</b>
+        {{index .Answers 1}}
       </div>
     </div>
-    <footer>
-      Copyright © 2024 Script Wizards —
-      <a href="https://scriptwizards.org">scriptwizards.org</a>
-    </footer>
+
+    <div class="controls">
+      <div class="no-print">
+        <a href="/cairn">REROLL</a>
+        <span> — </span>
+        <a href="/cairn-blank">CLEAR</a>
+        <span> — </span>
+        <a href="javascript:if(window.print)window.print()">PRINT</a>
+      </div>
+      <div>
+        Cairn 2nd Edition by
+        <a href="https://newschoolrevolution.com/">Yochai Gal</a>.
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">CC-BY SA 4.0</a>
+      </div>
+      <div>
+        © 2024 Script Wizards — <a href="https://scriptwizards.org">scriptwizards.org</a>
+      </div>
+    </div>
   </body>
 </html>

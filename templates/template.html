@@ -1,125 +1,248 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chargen | Script Wizards</title>
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png"
-    />
+    <link rel="icon" type="image/png" href="https://cdn.statically.io/gh/script-wizards/homepage/main/favicon.png" />
     <style>
-      html {
-        display: table;
-        margin: auto;
+      :root {
+        --text-color: #ece3d0;
+        --bg-color: #212121;
+        --accent-color: #ffa227;
+        --border-width: 3px;
       }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html, body {
+        height: 100%;
+      }
+
       body {
-        display: table-cell;
-        color: #ece3d0;
-        background-color: #212121;
-        margin: 0 25px 0 25px;
+        display: flex;
+        flex-direction: column;
+        color: var(--text-color);
+        background-color: var(--bg-color);
         font-family: "Courier New", Courier, monospace;
+        padding: 1rem;
+        font-size: 14px;
+        line-height: 1.2;
       }
-      p,
-      pre {
-        margin-top: 0;
-        margin-bottom: 0;
-        background-color: transparent;
-        font-family: "Courier New", Courier, monospace;
+
+      .nav {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        padding: 0.5rem;
+        border-bottom: var(--border-width) solid var(--accent-color);
+        margin-bottom: 1rem;
       }
-      a:link {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: none;
+
+      .nav a.active {
+        background-color: var(--accent-color);
+        color: var(--bg-color);
       }
-      a:visited {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: none;
+
+      .sheet-container {
+        flex: 1;
+        display: flex;
+        align-items: start;
+        justify-content: center;
+        padding: 1rem 0;
+        margin-bottom: 3rem;
       }
-      a:hover {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: underline;
+
+      .character-sheet {
+        white-space: pre;
+        font-size: 1em;
+        width: 72ch;
       }
-      a:active {
-        color: #ffa227;
-        background-color: transparent;
-        text-decoration: underline;
+
+      .checkbox {
+        cursor: pointer;
+        user-select: none;
       }
-      .print-only {
-        display: none;
+
+      .checkbox:hover {
+        color: var(--accent-color);
       }
-      @media print {
-        body {
-          color: #000000;
-          background-color: #ffffff;
-        }
-        a,
-        footer {
-          color: #000000 !important;
-        }
-        .no-print {
-          display: none;
-        }
-        .print-only {
-          display: inline;
-        }
-      }
-      footer {
+
+      .controls {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
+        background-color: var(--bg-color);
+        padding: 0.5rem;
+        border-top: var(--border-width) solid var(--accent-color);
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .editable-field {
+        background: none;
+        border: none;
+        color: inherit;
+        font-family: inherit;
+        font-size: inherit;
+        padding: 0;
+        margin: 0;
+        width: 10ch;
+        outline: none;
+      }
+
+      .editable-field:focus {
+        color: var(--accent-color);
+      }
+
+      .editable-field.number {
+        width: 3ch;
         text-align: center;
-        color: #ece3d0;
-        background-color: #212121;
-        padding: 5px;
+      }
+
+      button, a {
+        color: var(--accent-color);
+        text-decoration: none;
+        background: none;
+        border: var(--border-width) solid var(--accent-color);
+        padding: 0.25rem 0.5rem;
+        min-width: 8ch;
+        text-align: center;
+        font-family: inherit;
+        font-size: 1em;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+
+      button:hover, a:hover {
+        color: var(--bg-color);
+        background-color: var(--accent-color);
+      }
+
+      .copyright {
+        font-size: 1em;
+      }
+
+      @media print {
+        @page {
+          margin: 1cm;
+          size: letter portrait;
+        }
+
+        body {
+          color: black;
+          background-color: white;
+        }
+
+        .nav, .controls {
+          display: none;
+        }
+
+        .sheet-container {
+          margin: 0;
+          padding: 0;
+        }
+
+        .character-sheet {
+          font-size: 12px;
+          width: 100%;
+        }
+
+        .editable-field {
+          color: black;
+        }
       }
     </style>
   </head>
   <body>
-    <span class="no-print"><br /><br /></span>
-    <pre>
-┌NAME──────────────────────────┬PLAYER────────────────────────┐
-│                              │                              │
-├──────────────────────────────┴──────┬AC─────┬HP─────┬MAX────┤
-│ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}   │       │       │       │
-│ Title         {{printf "%-20s" .Title}}  │       │       │       │
-│ Alignment     {{printf "%-7s" .Alignment}}               │       │       │       │
-├ABILITY SCORES───────────────────────┴───────┴─┬─────┴───────┤
-│ STR  {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}  Melee hit/dmg, Open Doors        │             │
-│ INT  {{printf "%2d" .INT}}  {{printf "%+2d" .ModINT}}  Languages, {{printf "%-10s" .Literacy}}            │             │
-│ WIS  {{printf "%2d" .WIS}}  {{printf "%+2d" .ModWIS}}  Saves vs Magic                   │             │
-│ DEX  {{printf "%2d" .DEX}}  {{printf "%+2d" .ModDEX}}  AC, Missile Hit                  │             │
-│ CON  {{printf "%2d" .CON}}  {{printf "%+2d" .ModCON}}  Hit Points                       │             │
-│ CHA  {{printf "%2d" .CHA}}      {{printf "%-30s" (printf "%+d/%d/%d React/Retainers/Morale" (index .ModCHA 0) (index .ModCHA 1) (index .ModCHA 2)) }}   │             │
-├COMBAT────────────────┬SAVING THROWS───────────┼MOVEMENT─────┤
-│ HP (1d{{.HitDie}}{{printf "%+2d" .ModCON}})        {{printf "%2d" .HitPoints}} │ Death/Poison        {{printf "%2d" .SaveDeath}} │ OV   90mi/d │
-│ Armor Class       {{printf "%2d" .ArmorClass}} │ Wands               {{printf "%2d" .SaveWands}} │ EX   120'/t │
-│ Melee hit/dmg     {{printf "%+2d" .ModSTR}} │ Paralyze/Petrify    {{printf "%2d" .SaveParalyze}} │ EN    40'/r │
-│ Missile hit       {{printf "%+2d" .ModDEX}} │ Breath Attacks      {{printf "%2d" .SaveBreath}} │ Doors   {{.OpenDoors}}/6 │
-│ Initiative        {{printf "%+2d" .Initiative}} │ Spells/Rods/Staves  {{printf "%2d" .SaveSpells}} │             │
-├THAC0─────────────────┴────────────┬EXPERIENCE─┴─────────────┤
-│ AC   9  8  7  6  5  4  3  2  1  0 │                  {{printf "%6s" (printf "%+d%%" .XPBonus)}} │
-│ d20 {{.THAC0}}│                   /{{printf "%4d" .XPNext}} │
-└ABILITIES──────────────────────────┴─────────────────────────┘
+    <div class="nav">
+      <a href="/?class=cleric">CLERIC</a>
+      <a href="/?class=dwarf">DWARF</a>
+      <a href="/?class=elf">ELF</a>
+      <a href="/?class=fighter">FIGHTER</a>
+      <a href="/?class=halfling">HALFLING</a>
+      <a href="/?class=magic-user">MAGIC-USER</a>
+      <a href="/?class=thief">THIEF</a>
+    </div>
+
+    <div class="sheet-container">
+      <pre class="character-sheet">╔══════════════════════════════╦══════════════════════════════╗
+║ NAME <input type="text" class="editable-field">              ║ PLAYER <input type="text" class="editable-field">            ║
+╠══════════════════════════════╩══════╦═AC════╦═HP════╦═MX════╣
+║ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}   ║  <input type="text" class="editable-field number">  ║  <input type="text" class="editable-field number">  ║  <input type="text" class="editable-field number">  ║
+║ Title         {{printf "%-20s" .Title}}  ║       ║       ║       ║
+║ Alignment     {{printf "%-7s" .Alignment}}               ║       ║       ║       ║
+╠ABILITY SCORES═══════════════════════╩═══════╩═╦═════╩═══════╣
+║ STR  {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}  Melee hit/dmg, Open Doors        ║             ║
+║ INT  {{printf "%2d" .INT}}  {{printf "%+2d" .ModINT}}  Languages, {{printf "%-10s" .Literacy}}            ║             ║
+║ WIS  {{printf "%2d" .WIS}}  {{printf "%+2d" .ModWIS}}  Saves vs Magic                   ║             ║
+║ DEX  {{printf "%2d" .DEX}}  {{printf "%+2d" .ModDEX}}  AC, Missile Hit                  ║             ║
+║ CON  {{printf "%2d" .CON}}  {{printf "%+2d" .ModCON}}  Hit Points                       ║             ║
+║ CHA  {{printf "%2d" .CHA}}      {{printf "%-30s" (printf "%+d/%d/%d React/Retainers/Morale" (index .ModCHA 0) (index .ModCHA 1) (index .ModCHA 2)) }}   ║             ║
+╠COMBAT════════════════╦SAVING THROWS═══════════╬MOVEMENT═════╣
+║ HP (1d{{.HitDie}}{{printf "%+2d" .ModCON}})        {{printf "%2d" .HitPoints}} ║ Death/Poison        {{printf "%2d" .SaveDeath}} ║ OV      90m ║
+║ Armor Class       {{printf "%2d" .ArmorClass}} ║ Wands               {{printf "%2d" .SaveWands}} ║ EX     120' ║
+║ Melee hit/dmg     {{printf "%+2d" .ModSTR}} ║ Paralyze/Petrify    {{printf "%2d" .SaveParalyze}} ║ EN      40' ║
+║ Missile hit       {{printf "%+2d" .ModDEX}} ║ Breath Attacks      {{printf "%2d" .SaveBreath}} ║ Doors   {{.OpenDoors}}/6 ║
+║ Initiative        {{printf "%+2d" .Initiative}} ║ Spells/Rods/Staves  {{printf "%2d" .SaveSpells}} ║             ║
+╠THAC0═════════════════╩════════════╦EXPERIENCE═╩═════════════╣
+║ AC   9  8  7  6  5  4  3  2  1  0 ║                  {{printf "%6s" (printf "%+d%%" .XPBonus)}} ║
+║ d20 {{.THAC0}}║                   /{{printf "%4d" .XPNext}} ║
+╚ABILITIES══════════════════════════╩═════════════════════════╝
 {{.Abilities}}
-─INVENTORY─────────────────────────────────────────────────────
- Torches x6 □ □ □ □ □ □    Iron rations x7 □ □ □ □ □ □ □
+═INVENTORY═════════════════════════════════════════════════════
+ Torches x6 <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span>    Iron rations x7 <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span> <span class="checkbox">□</span>
  Backpack  Tinder box  Waterskin  {{.Gold}}gp
-{{.Inventory}}
-</pre
-    >
-    <footer>
-      <pre
-        class="no-print"
-      ><a href="." >REROLL</a><span> — </span><a href="/blank">CLEAR</a> - <a href="javascript:if(window.print)window.print()">PRINT</a></pre>
-      <pre
-        class="no-print"
-      ><a href="/?class=cleric">Cleric</a> <a href="/?class=dwarf">Dwarf</a> <a href="/?class=elf">Elf</a> <a href="/?class=fighter">Fighter</a> <a href="/?class=halfling">Halfling</a> <a href="/?class=magic-user">Magic-User</a> <a href="/?class=thief">Thief</a></pre>
-      Copyright © 2024 Script Wizards —
-      <a href="https://scriptwizards.org">scriptwizards.org</a>
-    </footer>
+{{.Inventory}}</pre>
+    </div>
+
+    <div class="controls">
+      <button onclick="window.location.href='.';" accesskey="r">REROLL</button>
+      <button onclick="window.location.href='/blank';" accesskey="c">CLEAR</button>
+      <button onclick="window.print();" accesskey="p">PRINT</button>
+      <span>|</span>
+      <span class="copyright">© SCRIPT WIZARDS — <a href="https://scriptwizards.org">SCRIPTWIZARDS.ORG</a></span>
+    </div>
+
+    <script>
+      // Save field values to localStorage
+      document.querySelectorAll('.editable-field').forEach(field => {
+        const storedValue = localStorage.getItem(field.id);
+        if (storedValue) field.value = storedValue;
+
+        field.addEventListener('input', (e) => {
+          localStorage.setItem(field.id, e.target.value);
+        });
+      });
+
+      // Handle checkbox toggles
+      document.querySelectorAll('.checkbox').forEach(box => {
+        box.addEventListener('click', () => {
+          box.textContent = box.textContent === '□' ? '■' : '□';
+        });
+      });
+
+      // Mark active class
+      const activeClass = new URLSearchParams(window.location.search).get('class');
+      if (activeClass) {
+        document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
+      }
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.altKey) {
+          if (e.key === 'r') window.location.href = '.';
+          if (e.key === 'c') window.location.href = '/blank';
+          if (e.key === 'p') window.print();
+        }
+      });
+    </script>
   </body>
 </html>
