@@ -10,7 +10,6 @@
         --text-color: #ece3d0;
         --bg-color: #212121;
         --accent-color: #ffa227;
-        --border-width: 3px;
       }
 
       * {
@@ -38,9 +37,6 @@
         display: flex;
         justify-content: center;
         gap: 1rem;
-        padding: 0.5rem;
-        border-bottom: var(--border-width) solid var(--accent-color);
-        margin-bottom: 1rem;
       }
 
       .nav a.active {
@@ -53,14 +49,13 @@
         display: flex;
         align-items: start;
         justify-content: center;
-        padding: 1rem 0;
+        padding: 1rem;
         margin-bottom: 3rem;
       }
 
       .character-sheet {
         white-space: pre;
         font-size: 1em;
-        width: 72ch;
       }
 
       .checkbox {
@@ -79,7 +74,6 @@
         right: 0;
         background-color: var(--bg-color);
         padding: 0.5rem;
-        border-top: var(--border-width) solid var(--accent-color);
         display: flex;
         gap: 1rem;
         justify-content: center;
@@ -111,7 +105,7 @@
         color: var(--accent-color);
         text-decoration: none;
         background: none;
-        border: var(--border-width) solid var(--accent-color);
+        border: 0 solid var(--accent-color);
         padding: 0.25rem 0.5rem;
         min-width: 8ch;
         text-align: center;
@@ -132,8 +126,13 @@
 
       @media print {
         @page {
-          margin: 1cm;
+          margin: 0.5cm;
           size: letter portrait;
+        }
+
+        html, body {
+          margin: 0;
+          padding: 0;
         }
 
         body {
@@ -151,8 +150,8 @@
         }
 
         .character-sheet {
-          font-size: 12px;
-          width: 100%;
+          transform: scale(1.4);
+          transform-origin: top center;
         }
 
         .editable-field {
@@ -171,7 +170,6 @@
       <a href="/?class=magic-user">MAGIC-USER</a>
       <a href="/?class=thief">THIEF</a>
     </div>
-
     <div class="sheet-container">
       <pre class="character-sheet">╔══════════════════════════════╦══════════════════════════════╗
 ║ NAME <input type="text" class="editable-field">              ║ PLAYER <input type="text" class="editable-field">            ║
@@ -212,16 +210,6 @@
     </div>
 
     <script>
-      // Save field values to localStorage
-      document.querySelectorAll('.editable-field').forEach(field => {
-        const storedValue = localStorage.getItem(field.id);
-        if (storedValue) field.value = storedValue;
-
-        field.addEventListener('input', (e) => {
-          localStorage.setItem(field.id, e.target.value);
-        });
-      });
-
       // Handle checkbox toggles
       document.querySelectorAll('.checkbox').forEach(box => {
         box.addEventListener('click', () => {
@@ -234,15 +222,6 @@
       if (activeClass) {
         document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
       }
-
-      // Keyboard shortcuts
-      document.addEventListener('keydown', (e) => {
-        if (e.altKey) {
-          if (e.key === 'r') window.location.href = '.';
-          if (e.key === 'c') window.location.href = '/blank';
-          if (e.key === 'p') window.print();
-        }
-      });
     </script>
   </body>
 </html>

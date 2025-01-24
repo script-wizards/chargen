@@ -10,6 +10,7 @@
         --text-color: #ece3d0;
         --bg-color: #212121;
         --accent-color: #ffa227;
+        --border-width: 3px;
       }
 
       * {
@@ -33,12 +34,23 @@
         line-height: 1.2;
       }
 
+      .nav {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .nav a.active {
+        background-color: var(--accent-color);
+        color: var(--bg-color);
+      }
+
       .sheet-container {
         flex: 1;
         display: flex;
         align-items: start;
         justify-content: center;
-        padding-top: 1rem;
+        padding: 1rem;
         margin-bottom: 3rem;
       }
 
@@ -54,34 +66,33 @@
         right: 0;
         background-color: var(--bg-color);
         padding: 0.5rem;
-        border-top: 1px solid var(--accent-color);
         display: flex;
         gap: 1rem;
         justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
       }
 
       button, a {
         color: var(--accent-color);
         text-decoration: none;
         background: none;
-        border: 1px solid var(--accent-color);
+        border: 0 solid var(--accent-color);
         padding: 0.25rem 0.5rem;
-        border-radius: 3px;
+        min-width: 8ch;
+        text-align: center;
         font-family: inherit;
-        font-size: 0.9em;
+        font-size: 1em;
         cursor: pointer;
+        text-transform: uppercase;
       }
 
       button:hover, a:hover {
-        background-color: var(--accent-color);
         color: var(--bg-color);
+        background-color: var(--accent-color);
       }
 
       .copyright {
-        font-size: 0.8em;
-        opacity: 0.8;
+        font-size: 1em;
       }
 
       @media print {
@@ -100,6 +111,10 @@
           background-color: white;
         }
 
+        .nav, .controls {
+          display: none;
+        }
+
         .sheet-container {
           margin: 0;
           padding: 0;
@@ -109,14 +124,19 @@
           transform: scale(1.4);
           transform-origin: top center;
         }
-
-        .controls {
-          display: none;
-        }
       }
     </style>
   </head>
   <body>
+    <div class="nav">
+      <a href="/?class=cleric">CLERIC</a>
+      <a href="/?class=dwarf">DWARF</a>
+      <a href="/?class=elf">ELF</a>
+      <a href="/?class=fighter">FIGHTER</a>
+      <a href="/?class=halfling">HALFLING</a>
+      <a href="/?class=magic-user">MAGIC-USER</a>
+      <a href="/?class=thief">THIEF</a>
+    </div>
     <div class="sheet-container">
       <pre class="character-sheet">┌NAME──────────────────────────┬PLAYER────────────────────────┐
 │                              │                              │
@@ -144,21 +164,19 @@
     </div>
 
     <div class="controls">
-      <button onclick="window.location.href='.'">REROLL</button>
-      <button onclick="window.location.href='/blank'">CLEAR</button>
-      <button onclick="window.print()">PRINT</button>
+      <button onclick="window.location.href='.';" accesskey="r">REROLL</button>
+      <button onclick="window.location.href='/blank';" accesskey="c">CLEAR</button>
+      <button onclick="window.print();" accesskey="p">PRINT</button>
       <span>|</span>
-      <div class="classes">
-        <a href="/?class=cleric">Cleric</a>
-        <a href="/?class=dwarf">Dwarf</a>
-        <a href="/?class=elf">Elf</a>
-        <a href="/?class=fighter">Fighter</a>
-        <a href="/?class=halfling">Halfling</a>
-        <a href="/?class=magic-user">Magic-User</a>
-        <a href="/?class=thief">Thief</a>
-      </div>
-      <span>|</span>
-      <span class="copyright">© Script Wizards — <a href="https://scriptwizards.org">scriptwizards.org</a></span>
+      <span class="copyright">© SCRIPT WIZARDS — <a href="https://scriptwizards.org">SCRIPTWIZARDS.ORG</a></span>
     </div>
+
+    <script>
+      // Mark active class
+      const activeClass = new URLSearchParams(window.location.search).get('class');
+      if (activeClass) {
+        document.querySelector(`a[href*="${activeClass}"]`)?.classList.add('active');
+      }
+    </script>
   </body>
 </html>
