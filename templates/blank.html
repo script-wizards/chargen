@@ -141,31 +141,6 @@
         line-height: 1;
       }
 
-      [contenteditable="true"] {
-        display: inline-block;
-        background: none;
-        border: none;
-        color: inherit;
-        font: inherit;
-        text-shadow: inherit;
-        outline: none;
-        min-width: 54ch;
-        max-width: 54ch;
-        white-space: pre;
-        vertical-align: top;
-      }
-
-      [contenteditable="true"]:focus {
-        color: var(--accent-color);
-        text-shadow: 0 0 5px var(--accent-color);
-      }
-
-      [contenteditable="true"].number {
-        min-width: 3ch;
-        max-width: 3ch;
-        text-align: center;
-      }
-
       .checkbox {
         cursor: pointer;
         user-select: none;
@@ -270,11 +245,6 @@
           height: auto;
           white-space: pre;
         }
-
-        [contenteditable="true"] {
-          color: black;
-          text-shadow: none;
-        }
       }
     </style>
   </head>
@@ -286,17 +256,17 @@
         <pre class="character-sheet">
 ╔═════════════════════════════════════════════════════════════╗
 ║ NAME                                                        ║
-╠═════════════════════════════════════╦═AC════╦═HP════╦═MX════╣
-║ Class                               ║       ║       ║       ║
-║ Title                               ║       ║       ║       ║
-║ Alignment                           ║       ║       ║       ║
-╠ABILITY SCORES═══════════════════════╩═══════╩═╦═════╩═══════╣
+╠═════════════════════════════════════╦AC═══════╦HP═══════════╣
+║ Class                               ║         ║             ║
+║ Title                               ║         ║             ║
+║ Alignment                           ║         ║             ║
+╠ABILITY SCORES═══════════════════════╩═════════╬═════════════╣
 ║ STR          Melee hit/dmg, Open Doors        ║             ║
 ║ INT          Languages, Literacy              ║             ║
 ║ WIS          Saves vs Magic                   ║             ║
 ║ DEX          AC, Missile Hit                  ║             ║
 ║ CON          Hit Points                       ║             ║
-║ CHA            / /  React/Retainers/Morale    ║             ║
+║ CHA           /  Retainers/Morale             ║             ║
 ╠COMBAT════════════════╦SAVING THROWS═══════════╬MOVEMENT═════╣
 ║ HP                   ║ Death/Poison           ║ OV          ║
 ║ Armor Class          ║ Wands                  ║ EX          ║
@@ -367,32 +337,6 @@
           "aria-expanded",
           nav.classList.contains("active")
         );
-      });
-
-      // Editable fields functionality
-      document.querySelectorAll("[contenteditable]").forEach((element) => {
-        element.addEventListener("input", (e) => {
-          const text = e.target.textContent;
-          const limit = element.classList.contains("number") ? 3 : 54;
-
-          if (text.length > limit) {
-            e.preventDefault();
-            e.target.textContent = text.slice(0, limit);
-            const range = document.createRange();
-            const sel = window.getSelection();
-            range.selectNodeContents(e.target);
-            range.collapse(false);
-            sel.removeAllRanges();
-            sel.addRange(range);
-          }
-        });
-
-        element.addEventListener("paste", (e) => {
-          e.preventDefault();
-          const limit = element.classList.contains("number") ? 3 : 54;
-          const text = e.clipboardData.getData("text/plain").slice(0, limit);
-          document.execCommand("insertText", false, text);
-        });
       });
 
       // Active class for current character class

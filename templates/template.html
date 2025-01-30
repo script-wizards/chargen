@@ -81,51 +81,6 @@
         min-width: min-content;
       }
 
-      /* New editable field styles */
-      .editable-container {
-        display: inline-block;
-        position: relative;
-        vertical-align: top;
-        margin: 0;
-        padding: 0;
-      }
-
-      .editable-field {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        background: none;
-        border: none;
-        font: inherit;
-        color: inherit;
-        text-shadow: inherit;
-        white-space: pre;
-      }
-
-      .editable-placeholder {
-        visibility: hidden;
-        white-space: pre;
-      }
-
-      .editable-container.name {
-        width: 54ch;
-      }
-
-      .editable-container.number {
-        width: 3ch;
-        text-align: center;
-      }
-
-      .editable-field:focus {
-        color: var(--accent-color);
-        text-shadow: 0 0 5px var(--accent-color);
-        outline: none;
-      }
-
       .nav {
         position: sticky;
         display: flex;
@@ -247,10 +202,6 @@
         .character-sheet {
           font-size: 3.5vw;
         }
-
-        .editable-container {
-          font-size: inherit;
-        }
       }
 
       @media print {
@@ -298,11 +249,6 @@
           height: auto;
           white-space: pre;
         }
-
-        .editable-field {
-          color: black;
-          text-shadow: none;
-        }
       }
     </style>
   </head>
@@ -312,19 +258,20 @@
 
     <main>
       <div class="sheet-container">
-        <pre class="character-sheet" aria-label="Character sheet">╔═════════════════════════════════════════════════════════════╗
-║ NAME <span class="editable-container name"><span class="editable-placeholder">                                                      </span><input type="text" class="editable-field" aria-label="Character name"></span> ║
-╠═════════════════════════════════════╦═AC════╦═HP════╦═MX════╣
-║ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}   ║       ║       ║       ║
-║ Title         {{printf "%-20s" .Title}}  ║  <span class="editable-container number"><span class="editable-placeholder">   </span><input type="text" class="editable-field" aria-label="Armor class"></span>  ║  <span class="editable-container number"><span class="editable-placeholder">   </span><input type="text" class="editable-field" aria-label="Hit points"></span>  ║  <span class="editable-container number"><span class="editable-placeholder">   </span><input type="text" class="editable-field" aria-label="Experience"></span>  ║
-║ Alignment     {{printf "%-7s" .Alignment}}               ║       ║       ║       ║
-╠ABILITY SCORES═══════════════════════╩═══════╩═╦═════╩═══════╣
+        <pre class="character-sheet" aria-label="Character sheet">
+╔═════════════════════════════════════════════════════════════╗
+║ NAME                                                        ║
+╠═════════════════════════════════════╦AC═══════╦HP═══════════╣
+║ Class         {{ printf "%-21s" (printf "Level %d %s" .Level .Class)}} ║         ║             ║
+║ Title         {{printf "%-21s" .Title}} ║         ║             ║
+║ Alignment     {{printf "%-21s" .Alignment}} ║         ║             ║
+╠ABILITY SCORES═══════════════════════╩═════════╬═════════════╣
 ║ STR  {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}  Melee hit/dmg, Open Doors        ║             ║
 ║ INT  {{printf "%2d" .INT}}  {{printf "%+2d" .ModINT}}  Languages, {{printf "%-10s" .Literacy}}            ║             ║
 ║ WIS  {{printf "%2d" .WIS}}  {{printf "%+2d" .ModWIS}}  Saves vs Magic                   ║             ║
 ║ DEX  {{printf "%2d" .DEX}}  {{printf "%+2d" .ModDEX}}  AC, Missile Hit                  ║             ║
 ║ CON  {{printf "%2d" .CON}}  {{printf "%+2d" .ModCON}}  Hit Points                       ║             ║
-║ CHA  {{printf "%2d" .CHA}}      {{printf "%-30s" (printf "%+d/%d/%d React/Retainers/Morale" (index .ModCHA 0) (index .ModCHA 1) (index .ModCHA 2)) }}   ║             ║
+║ CHA  {{printf "%2d" .CHA}}  {{printf "%-36s" (printf "%+d  %d/%d Retainers/Morale" (index .ModCHA 0) (index .ModCHA 1) (index .ModCHA 2)) }} ║             ║
 ╠COMBAT════════════════╦SAVING THROWS═══════════╬MOVEMENT═════╣
 ║ HP (1d{{.HitDie}}{{printf "%+2d" .ModCON}})        {{printf "%2d" .HitPoints}} ║ Death/Poison        {{printf "%2d" .SaveDeath}} ║ OV      90m ║
 ║ Armor Class       {{printf "%2d" .ArmorClass}} ║ Wands               {{printf "%2d" .SaveWands}} ║ EX     120' ║
@@ -380,39 +327,6 @@
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             toggleCheckbox(box);
-          }
-        });
-      });
-
-      // Enhanced input handling for editable fields
-      document.querySelectorAll('.editable-field').forEach(field => {
-        const container = field.parentElement;
-        const placeholder = container.querySelector('.editable-placeholder');
-
-        // Set initial width based on placeholder
-        field.style.width = placeholder.offsetWidth + 'px';
-
-        field.addEventListener('input', (e) => {
-          const maxLength = container.classList.contains('number') ? 3 : 54;
-          if (field.value.length > maxLength) {
-            field.value = field.value.slice(0, maxLength);
-          }
-        });
-
-        // Handle paste events
-        field.addEventListener('paste', (e) => {
-          e.preventDefault();
-          const maxLength = container.classList.contains('number') ? 3 : 54;
-          const text = e.clipboardData.getData('text/plain').slice(0, maxLength);
-          field.value = text;
-        });
-
-        // Maintain monospace alignment
-        field.addEventListener('blur', () => {
-          if (container.classList.contains('number')) {
-            field.value = field.value.padStart(3, ' ');
-          } else {
-            field.value = field.value.padEnd(54, ' ');
           }
         });
       });
