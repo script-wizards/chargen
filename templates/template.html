@@ -81,6 +81,51 @@
         min-width: min-content;
       }
 
+      /* New editable field styles */
+      .editable-container {
+        display: inline-block;
+        position: relative;
+        vertical-align: top;
+        margin: 0;
+        padding: 0;
+      }
+
+      .editable-field {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: none;
+        font: inherit;
+        color: inherit;
+        text-shadow: inherit;
+        white-space: pre;
+      }
+
+      .editable-placeholder {
+        visibility: hidden;
+        white-space: pre;
+      }
+
+      .editable-container.name {
+        width: 54ch;
+      }
+
+      .editable-container.number {
+        width: 3ch;
+        text-align: center;
+      }
+
+      .editable-field:focus {
+        color: var(--accent-color);
+        text-shadow: 0 0 5px var(--accent-color);
+        outline: none;
+      }
+
       .nav {
         position: sticky;
         display: flex;
@@ -141,31 +186,6 @@
         line-height: 1;
       }
 
-      [contenteditable="true"] {
-        display: inline-block;
-        background: none;
-        border: none;
-        color: inherit;
-        font: inherit;
-        text-shadow: inherit;
-        outline: none;
-        min-width: 54ch;
-        max-width: 54ch;
-        white-space: pre;
-        vertical-align: top;
-      }
-
-      [contenteditable="true"]:focus {
-        color: var(--accent-color);
-        text-shadow: 0 0 5px var(--accent-color);
-      }
-
-      [contenteditable="true"].number {
-        min-width: 3ch;
-        max-width: 3ch;
-        text-align: center;
-      }
-
       .checkbox {
         cursor: pointer;
         user-select: none;
@@ -223,6 +243,14 @@
         .sheet-container {
           order: 2;
         }
+
+        .character-sheet {
+          font-size: 3.5vw;
+        }
+
+        .editable-container {
+          font-size: inherit;
+        }
       }
 
       @media print {
@@ -271,7 +299,7 @@
           white-space: pre;
         }
 
-        [contenteditable="true"] {
+        .editable-field {
           color: black;
           text-shadow: none;
         }
@@ -284,14 +312,11 @@
 
     <main>
       <div class="sheet-container">
-        <pre
-          class="character-sheet"
-          aria-label="Character sheet"
-        >╔═════════════════════════════════════════════════════════════╗
-║ NAME <div contenteditable="true" class="editable-field" aria-label="Character name"></div> ║
+        <pre class="character-sheet" aria-label="Character sheet">╔═════════════════════════════════════════════════════════════╗
+║ NAME <span class="editable-container name"><span class="editable-placeholder">                                                      </span><input type="text" class="editable-field" aria-label="Character name"></span> ║
 ╠═════════════════════════════════════╦═AC════╦═HP════╦═MX════╣
 ║ Class         {{ printf "%-19s" (printf "Level %d %s" .Level .Class)}}   ║       ║       ║       ║
-║ Title         {{printf "%-20s" .Title}}  ║  <div contenteditable="true" class="editable-field number" aria-label="Armor class"> </div>  ║  <div contenteditable="true" class="editable-field number" aria-label="Hit points"> </div>  ║  <div contenteditable="true" class="editable-field number" aria-label="Experience"> </div>  ║
+║ Title         {{printf "%-20s" .Title}}  ║  <span class="editable-container number"><span class="editable-placeholder">   </span><input type="text" class="editable-field" aria-label="Armor class"></span>  ║  <span class="editable-container number"><span class="editable-placeholder">   </span><input type="text" class="editable-field" aria-label="Hit points"></span>  ║  <span class="editable-container number"><span class="editable-placeholder">   </span><input type="text" class="editable-field" aria-label="Experience"></span>  ║
 ║ Alignment     {{printf "%-7s" .Alignment}}               ║       ║       ║       ║
 ╠ABILITY SCORES═══════════════════════╩═══════╩═╦═════╩═══════╣
 ║ STR  {{printf "%2d" .STR}}  {{printf "%+2d" .ModSTR}}  Melee hit/dmg, Open Doors        ║             ║
@@ -332,16 +357,14 @@
           onclick="window.print(); return false;"
           class="nav-link"
           accesskey="p"
-          >Print</a
-        >
+          >Print</a>
       </nav>
     </main>
 
     <footer class="copyright">
       © Script Wizards
       <a href="https://www.scriptwizards.org" class="copyright-link"
-        >scriptwizards.org</a
-      >
+        >scriptwizards.org</a>
     </footer>
 
     <script>
@@ -361,6 +384,39 @@
         });
       });
 
+      // Enhanced input handling for editable fields
+      document.querySelectorAll('.editable-field').forEach(field => {
+        const container = field.parentElement;
+        const placeholder = container.querySelector('.editable-placeholder');
+
+        // Set initial width based on placeholder
+        field.style.width = placeholder.offsetWidth + 'px';
+
+        field.addEventListener('input', (e) => {
+          const maxLength = container.classList.contains('number') ? 3 : 54;
+          if (field.value.length > maxLength) {
+            field.value = field.value.slice(0, maxLength);
+          }
+        });
+
+        // Handle paste events
+        field.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const maxLength = container.classList.contains('number') ? 3 : 54;
+          const text = e.clipboardData.getData('text/plain').slice(0, maxLength);
+          field.value = text;
+        });
+
+        // Maintain monospace alignment
+        field.addEventListener('blur', () => {
+          if (container.classList.contains('number')) {
+            field.value = field.value.padStart(3, ' ');
+          } else {
+            field.value = field.value.padEnd(54, ' ');
+          }
+        });
+      });
+
       // Mobile menu functionality
       const menuToggle = document.querySelector(".menu-toggle");
       const nav = document.querySelector(".nav");
@@ -371,32 +427,6 @@
           "aria-expanded",
           nav.classList.contains("active")
         );
-      });
-
-      // Editable fields functionality
-      document.querySelectorAll("[contenteditable]").forEach((element) => {
-        element.addEventListener("input", (e) => {
-          const text = e.target.textContent;
-          const limit = element.classList.contains("number") ? 3 : 54;
-
-          if (text.length > limit) {
-            e.preventDefault();
-            e.target.textContent = text.slice(0, limit);
-            const range = document.createRange();
-            const sel = window.getSelection();
-            range.selectNodeContents(e.target);
-            range.collapse(false);
-            sel.removeAllRanges();
-            sel.addRange(range);
-          }
-        });
-
-        element.addEventListener("paste", (e) => {
-          e.preventDefault();
-          const limit = element.classList.contains("number") ? 3 : 54;
-          const text = e.clipboardData.getData("text/plain").slice(0, limit);
-          document.execCommand("insertText", false, text);
-        });
       });
 
       // Active class for current character class
