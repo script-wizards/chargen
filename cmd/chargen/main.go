@@ -11,7 +11,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/script-wizards/chargen/internal/cairn"
 	"github.com/script-wizards/chargen/internal/character"
 	"golang.org/x/text/cases"
